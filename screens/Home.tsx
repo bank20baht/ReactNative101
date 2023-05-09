@@ -1,14 +1,40 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import {View, Text, ScrollView} from 'react-native';
+import React from 'react';
 
-type Props = {}
+type Props = {};
 
 const Home = (props: Props) => {
   return (
-    <View>
-      <Text>home page</Text>
-    </View>
-  )
-}
+    <ScrollView>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+        <Text style={{fontSize: 30}}>home page</Text>
+    </ScrollView>
+  );
+};
 
-export default Home
+export default Home;
