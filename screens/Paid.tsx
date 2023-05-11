@@ -1,13 +1,71 @@
 import {StyleSheet, Text, View, TextInput} from 'react-native';
 import React, {useState} from 'react';
+import SQLite from 'react-native-sqlite-storage';
 
 type Props = {};
+
+const db = SQLite.openDatabase(
+  {
+    name: 'test2.db',
+    location: 'default',
+  },
+  () => {
+    console.log('Database opened successfully');
+  },
+  error => {
+    console.error('Faild to open database: ', error);
+  },
+);
 
 const Paid = (props: Props) => {
   const [amout, setAmout] = useState('');
   const [listName, setListName] = useState('');
   const [info, setInfo] = useState('');
   const [date, setDate] = useState(new Date());
+  const status = "Paid"
+  const insertData = () => {
+    db.transaction((tx:any )=> {
+      tx.executeSql(
+        'INSERT INTO expenses (amount, listName, info, date, status) VALUES (?, ?, ?, ?, ?)',
+        [amout, listName, info, date, status],
+        (_:any, result:any) => {
+          console.log('Data inserted successfully');
+        },
+        (error:any) => {
+          console.error('Failed to insert data: ', error);
+        },
+      );
+    });
+  };
+  db.transaction((tx:any) => {
+    tx.executeSql(
+      'CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, amount REAL, listName TEXT, info TEXT, date TEXT, status TEXT)',
+      [],
+      (_:any, result:any) => {
+        console.log('Table created successfully');
+      },
+      (error:any) => {
+        console.error('Failed to create table: ', error);
+      },
+    );
+  });
+
+  const getData = () => {
+    db.transaction((tx:any) => {
+      tx.executeSql(
+        'SELECT * FROM expenses',
+        [],
+        (_:any, { rows }:any) => {
+          console.log('Data retrieved successfully');
+          console.log(rows.raw());
+        },
+        (error:any) => {
+          console.error('Failed to retrieve data: ', error);
+        },
+      );
+    });
+  };
+  
   return (
     <View style={{flex: 1}}>
       <View
@@ -17,7 +75,12 @@ const Paid = (props: Props) => {
           padding: 10,
         }}>
         <Text style={{width: '50%'}}>จำนวนเงิน</Text>
-        <TextInput style={styles.input} onChangeText={setAmout} value={amout} textAlign="right"/>
+        <TextInput
+          style={styles.input}
+          onChangeText={setAmout}
+          value={amout}
+          textAlign="right"
+        />
       </View>
       <View
         style={{
@@ -26,7 +89,11 @@ const Paid = (props: Props) => {
           padding: 10,
         }}>
         <Text>ชื่อรายการ</Text>
-        <TextInput style={styles.input} onChangeText={setListName} textAlign="right"/>
+        <TextInput
+          style={styles.input}
+          onChangeText={setListName}
+          textAlign="right"
+        />
       </View>
       <View
         style={{
@@ -41,7 +108,7 @@ const Paid = (props: Props) => {
         <Text>รายละเอียดเพิ่มเติม</Text>
         <TextInput
           style={styles.textarea}
-          numberOfLines = {4}
+          numberOfLines={4}
           multiline={true}
           onChangeText={setInfo}
           textAlignVertical="top"
@@ -59,7 +126,7 @@ const Paid = (props: Props) => {
           padding: 5,
           backgroundColor: '#ff6961',
         }}>
-        <Text style={{fontSize: 20, color: '#ffffff'}}>บันทึก</Text>
+        <Text style={{fontSize: 20, color: '#ffffff'}} onPress={insertData}>บันทึก</Text>
       </View>
     </View>
   );
