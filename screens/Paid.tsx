@@ -1,26 +1,52 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {StyleSheet, Text, View, TextInput} from 'react-native';
+import React, {useState} from 'react';
 
-type Props = {}
+type Props = {};
 
 const Paid = (props: Props) => {
+  const [amout, setAmout] = useState('');
+  const [listName, setListName] = useState('');
+  const [info, setInfo] = useState('');
+  const [date, setDate] = useState(new Date());
   return (
     <View style={{flex: 1}}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
-        <Text>จำนวนเงิน</Text>
-        <Text>500 บาท</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          padding: 10,
+        }}>
+        <Text style={{width: '50%'}}>จำนวนเงิน</Text>
+        <TextInput style={styles.input} onChangeText={setAmout} value={amout} textAlign="right"/>
       </View>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          padding: 10,
+        }}>
         <Text>ชื่อรายการ</Text>
-        <Text>ข้าวไข่เจียวหมูสับ</Text>
+        <TextInput style={styles.input} onChangeText={setListName} textAlign="right"/>
       </View>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          padding: 10,
+        }}>
         <Text>วันที่</Text>
-        <Text>10/05/23</Text>
+        <Text>{date.toString()}</Text>
       </View>
-      <View style={{justifyContent: 'space-between', padding: 10}}>
+      <View style={{padding: 10}}>
         <Text>รายละเอียดเพิ่มเติม</Text>
-        <Text>ข้าวไข่เจียวหมูสับ + พิเศษไข่ดาว</Text>
+        <TextInput
+          style={styles.textarea}
+          numberOfLines = {4}
+          multiline={true}
+          onChangeText={setInfo}
+          textAlignVertical="top"
+          textAlign="left"
+        />
       </View>
       <View
         style={{
@@ -31,14 +57,22 @@ const Paid = (props: Props) => {
           flexDirection: 'row',
           justifyContent: 'center',
           padding: 5,
-          backgroundColor: '#ff6961'
+          backgroundColor: '#ff6961',
         }}>
         <Text style={{fontSize: 20, color: '#ffffff'}}>บันทึก</Text>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default Paid
+export default Paid;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  input: {
+    width: '50%',
+    borderWidth: 1,
+  },
+  textarea: {
+    borderWidth: 1,
+  },
+});

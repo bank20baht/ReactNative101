@@ -1,9 +1,24 @@
 import {View, Text, ScrollView} from 'react-native';
 import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SQLite from 'react-native-sqlite-storage';
 
 type Props = {};
 
 const Home = ({navigation}: any, props: Props) => {
+
+  SQLite.openDatabase({
+    name: 'test.db',
+    location: 'default',
+  },
+  () => {
+    console.log('Database opened successfully')
+  },
+  error => {
+    console.error('Faild to open database: ', error)
+  })
+
+
   const PaidPage = () => {
     navigation.navigate('Paid');
   };
@@ -20,6 +35,7 @@ const Home = ({navigation}: any, props: Props) => {
             alignItems: 'center',
             backgroundColor: '#ffffff',
             padding: 10,
+            borderColor: 'black'
           }}>
           <Text>จำนวนเงินคงเหลือ</Text>
           <Text style={{fontSize: 30}}>20 บาท</Text>
