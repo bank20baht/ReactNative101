@@ -17,55 +17,44 @@ const db = SQLite.openDatabase(
   },
 );
 
-const Paid = (props: Props) => {
+const Paid = ({navigation}: any, props: Props) => {
   const [amout, setAmout] = useState('');
   const [listName, setListName] = useState('');
   const [info, setInfo] = useState('');
   const [date, setDate] = useState(new Date());
-  const status = "Paid"
+  const status = 'Paid';
   const insertData = () => {
-    db.transaction((tx:any )=> {
+    db.transaction((tx: any) => {
       tx.executeSql(
         'INSERT INTO expenses (amount, listName, info, date, status) VALUES (?, ?, ?, ?, ?)',
         [amout, listName, info, date, status],
-        (_:any, result:any) => {
+        (_: any, result: any) => {
           console.log('Data inserted successfully');
         },
-        (error:any) => {
+        (error: any) => {
           console.error('Failed to insert data: ', error);
         },
       );
     });
+    returnPage();
   };
-  db.transaction((tx:any) => {
+  db.transaction((tx: any) => {
     tx.executeSql(
       'CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, amount REAL, listName TEXT, info TEXT, date TEXT, status TEXT)',
       [],
-      (_:any, result:any) => {
+      (_: any, result: any) => {
         console.log('Table created successfully');
       },
-      (error:any) => {
+      (error: any) => {
         console.error('Failed to create table: ', error);
       },
     );
   });
 
-  const getData = () => {
-    db.transaction((tx:any) => {
-      tx.executeSql(
-        'SELECT * FROM expenses',
-        [],
-        (_:any, { rows }:any) => {
-          console.log('Data retrieved successfully');
-          console.log(rows.raw());
-        },
-        (error:any) => {
-          console.error('Failed to retrieve data: ', error);
-        },
-      );
-    });
+  const returnPage = () => {
+    navigation.navigate('Home');
   };
-  
+
   return (
     <View style={{flex: 1}}>
       <View
@@ -80,6 +69,7 @@ const Paid = (props: Props) => {
           onChangeText={setAmout}
           value={amout}
           textAlign="right"
+          keyboardType="numeric"
         />
       </View>
       <View
@@ -126,7 +116,9 @@ const Paid = (props: Props) => {
           padding: 5,
           backgroundColor: '#ff6961',
         }}>
-        <Text style={{fontSize: 20, color: '#ffffff'}} onPress={insertData}>บันทึก</Text>
+        <Text style={{fontSize: 20, color: '#ffffff'}} onPress={insertData}>
+          บันทึก
+        </Text>
       </View>
     </View>
   );

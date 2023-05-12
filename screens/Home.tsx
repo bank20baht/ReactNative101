@@ -1,24 +1,27 @@
-import {View, Text, ScrollView} from 'react-native';
-import React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
+import CardBalance from '../components/CardBalance';
+import BalanceSplite from '../components/BalanceSplit';
+import Cardlist from '../components/Cardlist';
+import {useFocusEffect} from '@react-navigation/native';
 
 type Props = {};
 
-const Home = ({navigation}: any, props: Props) => {
-
-  SQLite.openDatabase({
-    name: 'test.db',
+const db = SQLite.openDatabase(
+  {
+    name: 'test2.db',
     location: 'default',
   },
   () => {
-    console.log('Database opened successfully')
+    console.log('Database opened successfully');
   },
   error => {
-    console.error('Faild to open database: ', error)
-  })
+    console.error('Faild to open database: ', error);
+  },
+);
 
-
+const Home = ({navigation}: any, props: Props) => {
   const PaidPage = () => {
     navigation.navigate('Paid');
   };
@@ -27,68 +30,52 @@ const Home = ({navigation}: any, props: Props) => {
     navigation.navigate('Received');
   };
 
+  const [lists, setList] = useState<any[]>([]);
+
+  const fetchData = async () => {
+    return new Promise<void>((resolve, reject) => {
+      db.transaction((tx: any) => {
+        tx.executeSql(
+          'SELECT * FROM expenses',
+          [],
+          (_: any, {rows}: any) => {
+            console.log('Data retrieved successfully');
+            setList(rows.raw());
+            resolve();
+          },
+          (error: any) => {
+            console.error('Failed to retrieve data: ', error);
+            reject(error);
+          },
+        );
+      });
+    });
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, []),
+  );
+
   return (
     <View style={{flex: 1}}>
       <ScrollView>
-        <View
-          style={{
-            alignItems: 'center',
-            backgroundColor: '#ffffff',
-            padding: 10,
-            borderColor: 'black'
-          }}>
-          <Text>จำนวนเงินคงเหลือ</Text>
-          <Text style={{fontSize: 30}}>20 บาท</Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            margin: 10,
-          }}>
-          <View style={{alignItems: 'center', flex: 0.5}}>
-            <Text>รวมรายจ่าย</Text>
-            <Text>2000.00 บาท</Text>
-          </View>
-          <View style={{alignItems: 'center', flex: 0.5}}>
-            <Text>รวมรายรับ</Text>
-            <Text>4000.00 บาท</Text>
-          </View>
-        </View>
+        <CardBalance value={20} />
+        <BalanceSplite paid={200} received={20} />
         <View>
-        <View style={{flexDirection: 'row', backgroundColor: 'white'}}>
-          <Text>10</Text>
           <View>
-            <Text>วันพุธ</Text>
-            <Text>พฤษภาคม 2023</Text>
+            {lists ? (
+              lists.map((list: any) => {
+                return <Cardlist value={list} key={list.id} />;
+              })
+            ) : (
+              <View>
+                <Text>No list found in datase.</Text>
+              </View>
+            )}
           </View>
         </View>
-        <View style= {{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
-          <Text>ข้าวไข่เจียวหมูสับ</Text>
-          <Text>40 บาท</Text>
-        </View>
-        <View style= {{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
-          <Text>ข้าวไข่เจียวหมูสับ</Text>
-          <Text>40 บาท</Text>
-        </View>
-        <View style= {{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
-          <Text>ข้าวไข่เจียวหมูสับ</Text>
-          <Text>40 บาท</Text>
-        </View>
-        <View style= {{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
-          <Text>ข้าวไข่เจียวหมูสับ</Text>
-          <Text>40 บาท</Text>
-        </View>
-        <View style= {{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
-          <Text>ข้าวไข่เจียวหมูสับ</Text>
-          <Text>40 บาท</Text>
-        </View>
-        <View style= {{flexDirection: 'row', justifyContent: 'space-between', padding: 5}}>
-          <Text>ข้าวไข่เจียวหมูสับ</Text>
-          <Text>40 บาท</Text>
-        </View>
-        </View>
-
       </ScrollView>
       <View
         style={{
@@ -99,7 +86,8 @@ const Home = ({navigation}: any, props: Props) => {
           flexDirection: 'row',
           justifyContent: 'space-evenly',
         }}>
-        <View style={{flex: 0.5, backgroundColor: '#ff6961', alignItems: 'center'}}>
+        <View
+          style={{flex: 0.5, backgroundColor: '#ff6961', alignItems: 'center'}}>
           <Text style={{fontSize: 20, color: 'white'}} onPress={PaidPage}>
             จ่าย
           </Text>
