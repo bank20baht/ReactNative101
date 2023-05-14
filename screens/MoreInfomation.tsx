@@ -147,6 +147,7 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
                 color: '#ffffff',
                 textAlign: 'center',
                 padding: 5,
+                backgroundColor: '#E57734',
               }}
               onPress={handleSubmit}>
               บันทึก

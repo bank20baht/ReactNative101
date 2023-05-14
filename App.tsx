@@ -23,7 +23,15 @@ const App = (props: Props) => {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{title: 'Welcome'}}
+          options={{
+            title: 'My Wallet',
+            headerTitleStyle: {
+              color: 'white',
+            },
+            headerStyle: {
+              backgroundColor: '#92CEA8',
+            },
+          }}
         />
         <Stack.Screen
           name="Paid"

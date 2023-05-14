@@ -5,6 +5,7 @@ import CardBalance from '../components/CardBalance';
 import BalanceSplite from '../components/BalanceSplit';
 import Cardlist from '../components/Cardlist';
 import {useFocusEffect, useRoute} from '@react-navigation/native';
+import {PieChart} from 'react-native-chart-kit';
 
 type Props = {};
 
@@ -73,9 +74,43 @@ const Home = ({navigation}: any, props: Props) => {
     }, []),
   );
 
+  const chartConfig = {
+    backgroundGradientFrom: '#1E2923',
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: '#08130D',
+    backgroundGradientToOpacity: 0.5,
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    strokeWidth: 2, // optional, default 3
+    barPercentage: 0.5,
+  };
+
+  const data = [
+    {
+      name: 'Paid',
+      amount: sumPaid,
+      color: '#FF6384',
+    },
+    {
+      name: 'Received',
+      amount: sumReceived,
+      color: '#92CEA8',
+    },
+  ];
   return (
     <View style={{flex: 1}}>
       <ScrollView>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <PieChart
+            data={data}
+            width={300}
+            height={220}
+            chartConfig={chartConfig}
+            accessor="amount"
+            backgroundColor="transparent"
+            paddingLeft="15"
+          />
+        </View>
+
         <CardBalance value={sumReceived - sumPaid} />
         <BalanceSplite sumPaid={sumPaid} sumReceived={sumReceived} />
         <View>
