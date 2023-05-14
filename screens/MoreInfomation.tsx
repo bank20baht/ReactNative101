@@ -3,7 +3,7 @@ import React from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {ErrorMessage, Formik} from 'formik';
 import {number, object, string} from 'yup';
-import {useRoute} from '@react-navigation/native';
+
 const db = SQLite.openDatabase(
   {
     name: 'test2.db',
@@ -27,21 +27,10 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
     status: status.toString(),
   };
 
-  const validationSchema = object().shape({
-    amount: number().required('จำเป็นต้องระบุจำนวนเงิน'),
-    listName: string()
-      .matches(/^[a-zA-Zก-๙]+$/, 'ชื่อรายการต้องเป็นตัวอักษรเท่านั้น')
-      .required('จำเป็นต้องระบุชื่อรายการ'),
-    info: string().matches(
-      /^[a-zA-Zก-๙]+$/,
-      'ชื่อข้อมูลเพิ่มเติมต้องเป็นตัวอักษรเท่านั้น',
-    ),
-  });
-
   const handleFormSubmit = (values: any) => {
     db.transaction((tx: any) => {
       tx.executeSql(
-        'UPDATE expenses SET amount=?, listName=?, info=?, date=?, status=? WHERE id=?',
+        'UPDATE expenses SET amount = ?, listName = ?, info = ?, date = ?, status = ? WHERE id = ?',
         [
           values.amount,
           values.listName,
@@ -61,24 +50,24 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
     navigation.navigate('Home');
   };
 
-  db.transaction((tx: any) => {
-    tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, amount REAL, listName TEXT, info TEXT, date TEXT, status TEXT)',
-      [],
-      (_: any, result: any) => {
-        console.log('Table created successfully');
-      },
-      (error: any) => {
-        console.error('Failed to create table: ', error);
-      },
-    );
-  });
+  const handleDelete = () => {
+    db.transaction((tx: any) => {
+      tx.executeSql(
+        'DELETE FROM expenses WHERE id = ?',
+        [id],
+        (_: any, result: any) => {
+          console.log('Data deleted successfully');
+        },
+        (error: any) => {
+          console.error('Failed to delete data: ', error);
+        },
+      );
+    });
+    navigation.navigate('Home');
+  };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleFormSubmit}
-      validationSchema={validationSchema}>
+    <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
       {({handleChange, handleSubmit, values}) => (
         <View style={{flex: 1}}>
           <View
@@ -146,22 +135,22 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
                   textAlign: 'center',
                   color: 'red',
                   padding: 5,
-                }}>
+                }}
+                onPress={handleDelete}>
                 ลบรายการ
               </Text>
             </View>
-            <View style={{backgroundColor: '#E57734'}}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: '#ffffff',
-                  textAlign: 'center',
-                  padding: 5,
-                }}
-                onPress={handleSubmit}>
-                บันทึก
-              </Text>
-            </View>
+
+            <Text
+              style={{
+                fontSize: 20,
+                color: '#ffffff',
+                textAlign: 'center',
+                padding: 5,
+              }}
+              onPress={handleSubmit}>
+              บันทึก
+            </Text>
           </View>
         </View>
       )}
