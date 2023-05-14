@@ -1,10 +1,9 @@
 import {StyleSheet, Text, View, TextInput} from 'react-native';
 import React from 'react';
 import SQLite from 'react-native-sqlite-storage';
-import {Formik} from 'formik';
+import {ErrorMessage, Formik} from 'formik';
 import {number, object, string} from 'yup';
-type Props = {};
-
+import {useRoute} from '@react-navigation/native';
 const db = SQLite.openDatabase(
   {
     name: 'test2.db',
@@ -18,35 +17,44 @@ const db = SQLite.openDatabase(
   },
 );
 
-const validationSchema = object().shape({
-  amount: number().required(),
-  listName: string().required(),
-});
-
-const Received = ({navigation}: any, props: Props) => {
+const MoreInfomation = ({route, navigation}: any, props: any) => {
+  const {id, amount, listName, info, status} = route.params;
+  console.log(route.params);
   const initialValues = {
-    amount: '',
-    listName: '',
-    info: '',
-    status: 'Received',
+    amount: amount.toString(),
+    listName: listName.toString(),
+    info: info.toString(),
+    status: status.toString(),
   };
+
+  const validationSchema = object().shape({
+    amount: number().required('จำเป็นต้องระบุจำนวนเงิน'),
+    listName: string()
+      .matches(/^[a-zA-Zก-๙]+$/, 'ชื่อรายการต้องเป็นตัวอักษรเท่านั้น')
+      .required('จำเป็นต้องระบุชื่อรายการ'),
+    info: string().matches(
+      /^[a-zA-Zก-๙]+$/,
+      'ชื่อข้อมูลเพิ่มเติมต้องเป็นตัวอักษรเท่านั้น',
+    ),
+  });
 
   const handleFormSubmit = (values: any) => {
     db.transaction((tx: any) => {
       tx.executeSql(
-        'INSERT INTO expenses (amount, listName, info, date, status) VALUES (?, ?, ?, ?, ?)',
+        'UPDATE expenses SET amount=?, listName=?, info=?, date=?, status=? WHERE id=?',
         [
           values.amount,
           values.listName,
           values.info,
           new Date(),
           values.status,
+          id,
         ],
         (_: any, result: any) => {
-          console.log('Data inserted successfully');
+          console.log('Data updated successfully');
         },
         (error: any) => {
-          console.error('Failed to insert data: ', error);
+          console.error('Failed to update data: ', error);
         },
       );
     });
@@ -120,6 +128,7 @@ const Received = ({navigation}: any, props: Props) => {
               onChangeText={handleChange('info')}
               textAlignVertical="top"
               textAlign="left"
+              value={values.info}
             />
           </View>
           <View
@@ -128,16 +137,31 @@ const Received = ({navigation}: any, props: Props) => {
               left: 0,
               right: 0,
               bottom: 0,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              padding: 5,
-              backgroundColor: '#92CEA8',
+              flexDirection: 'column',
             }}>
-            <Text
-              style={{fontSize: 20, color: '#ffffff'}}
-              onPress={handleSubmit}>
-              บันทึก
-            </Text>
+            <View>
+              <Text
+                style={{
+                  fontSize: 20,
+                  textAlign: 'center',
+                  color: 'red',
+                  padding: 5,
+                }}>
+                ลบรายการ
+              </Text>
+            </View>
+            <View style={{backgroundColor: '#E57734'}}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  color: '#ffffff',
+                  textAlign: 'center',
+                  padding: 5,
+                }}
+                onPress={handleSubmit}>
+                บันทึก
+              </Text>
+            </View>
           </View>
         </View>
       )}
@@ -145,7 +169,7 @@ const Received = ({navigation}: any, props: Props) => {
   );
 };
 
-export default Received;
+export default MoreInfomation;
 
 const styles = StyleSheet.create({
   input: {

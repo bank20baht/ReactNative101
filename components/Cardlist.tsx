@@ -1,8 +1,9 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
 const Cardlist = (props: any) => {
   const {listName, amount, status} = props.value;
+
   return (
     <View
       style={{

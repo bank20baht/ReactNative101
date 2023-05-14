@@ -1,10 +1,10 @@
-import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, ScrollView, Pressable} from 'react-native';
 import React, {useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import CardBalance from '../components/CardBalance';
 import BalanceSplite from '../components/BalanceSplit';
 import Cardlist from '../components/Cardlist';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useRoute} from '@react-navigation/native';
 
 type Props = {};
 
@@ -81,9 +81,25 @@ const Home = ({navigation}: any, props: Props) => {
         <View>
           <View>
             {lists ? (
-              lists.map((list: any) => {
-                return <Cardlist value={list} key={list.id} />;
-              })
+              lists
+                .slice(0)
+                .reverse()
+                .map((list: any) => {
+                  return (
+                    <Pressable
+                      onPress={() => {
+                        navigation.navigate('MoreInfomation', {
+                          id: list.id,
+                          amount: list.amount,
+                          listName: list.listName,
+                          info: list.info,
+                          status: list.status,
+                        });
+                      }}>
+                      <Cardlist value={list} key={list.id} />
+                    </Pressable>
+                  );
+                })
             ) : (
               <View>
                 <Text>No list found in datase.</Text>
