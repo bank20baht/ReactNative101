@@ -1,5 +1,5 @@
 import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import CardBalance from '../components/CardBalance';
 import BalanceSplite from '../components/BalanceSplit';
@@ -31,6 +31,8 @@ const Home = ({navigation}: any, props: Props) => {
   };
 
   const [lists, setList] = useState<any[]>([]);
+  const [sumPaid, setSumPaid] = useState<number>(0);
+  const [sumReceived, setSumReceived] = useState<number>(0);
 
   const fetchData = async () => {
     return new Promise<void>((resolve, reject) => {
@@ -41,6 +43,19 @@ const Home = ({navigation}: any, props: Props) => {
           (_: any, {rows}: any) => {
             console.log('Data retrieved successfully');
             setList(rows.raw());
+
+            let sumPaid = 0;
+            let sumReceived = 0;
+
+            for (let i = 0; i < rows.length; i++) {
+              if (rows.item(i).status === 'Paid') {
+                sumPaid += rows.item(i).amount;
+              } else if (rows.item(i).status === 'Received') {
+                sumReceived += rows.item(i).amount;
+              }
+            }
+            setSumPaid(sumPaid);
+            setSumReceived(sumReceived);
             resolve();
           },
           (error: any) => {
@@ -61,8 +76,8 @@ const Home = ({navigation}: any, props: Props) => {
   return (
     <View style={{flex: 1}}>
       <ScrollView>
-        <CardBalance value={20} />
-        <BalanceSplite paid={200} received={20} />
+        <CardBalance value={sumReceived - sumPaid} />
+        <BalanceSplite sumPaid={sumPaid} sumReceived={sumReceived} />
         <View>
           <View>
             {lists ? (

@@ -9,11 +9,20 @@ const Cardlist = (props: any) => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 5,
+        margin: 5,
       }}>
-      <Text style={{color: status === 'Paid' ? 'red' : 'green'}}>
+      <Text
+        style={{
+          fontSize: 20,
+          color: status === 'Paid' ? 'red' : 'green',
+        }}>
         {listName}
       </Text>
-      <Text style={{color: status === 'Paid' ? 'red' : 'green'}}>
+      <Text
+        style={{
+          fontSize: 20,
+          color: status === 'Paid' ? 'red' : 'green',
+        }}>
         {amount} บาท
       </Text>
     </View>

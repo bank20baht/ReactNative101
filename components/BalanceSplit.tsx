@@ -2,8 +2,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
 type Props = {
-  paid: number;
-  received: number;
+  sumPaid: number;
+  sumReceived: number;
 };
 
 const BalanceSplit = (props: Props) => {
@@ -17,11 +17,11 @@ const BalanceSplit = (props: Props) => {
         }}>
         <View style={{alignItems: 'center', flex: 0.5}}>
           <Text>รวมรายจ่าย</Text>
-          <Text>{props.paid} บาท</Text>
+          <Text>{props.sumPaid} บาท</Text>
         </View>
         <View style={{alignItems: 'center', flex: 0.5}}>
           <Text>รวมรายรับ</Text>
-          <Text>{props.received} บาท</Text>
+          <Text>{props.sumReceived} บาท</Text>
         </View>
       </View>
     </View>
