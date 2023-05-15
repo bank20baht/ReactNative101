@@ -11,11 +11,11 @@ import React from 'react';
 
 type Props = {};
 
-const Splash = ({navigation}:any,props: Props) => {
+const Splash = ({navigation}: any, props: Props) => {
   const changePage = () => {
-    navigation.navigate('Home')
-  }
-  
+    navigation.navigate('Home');
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#363636" />
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     alignItems: 'center',
-    backgroundColor: '#ff6961',
+    backgroundColor: '#644536',
   },
   logo: {
     width: 150,

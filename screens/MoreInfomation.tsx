@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TextInput} from 'react-native';
+import {StyleSheet, Text, View, TextInput, StatusBar} from 'react-native';
 import React from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {ErrorMessage, Formik} from 'formik';
@@ -70,6 +70,7 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
     <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
       {({handleChange, handleSubmit, values}) => (
         <View style={{flex: 1}}>
+          <StatusBar barStyle="light-content" backgroundColor="#98D8AA" />
           <View
             style={{
               flexDirection: 'row',

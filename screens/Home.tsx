@@ -1,4 +1,4 @@
-import {View, Text, ScrollView, Pressable} from 'react-native';
+import {View, Text, ScrollView, Pressable, StatusBar} from 'react-native';
 import React, {useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import CardBalance from '../components/CardBalance';
@@ -80,7 +80,7 @@ const Home = ({navigation}: any, props: Props) => {
     backgroundGradientTo: '#08130D',
     backgroundGradientToOpacity: 0.5,
     color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
+    strokeWidth: 5, // optional, default 3
     barPercentage: 0.5,
   };
 
@@ -88,17 +88,19 @@ const Home = ({navigation}: any, props: Props) => {
     {
       name: 'Paid',
       amount: sumPaid,
-      color: '#FF6384',
+      color: '#FF6D60',
     },
     {
       name: 'Received',
       amount: sumReceived,
-      color: '#92CEA8',
+      color: '#98D8AA',
     },
   ];
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: '#F9FBE7'}}>
+      <StatusBar barStyle="light-content" backgroundColor="#644536" />
       <ScrollView>
+        <CardBalance value={sumReceived - sumPaid} />
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <PieChart
             data={data}
@@ -111,7 +113,6 @@ const Home = ({navigation}: any, props: Props) => {
           />
         </View>
 
-        <CardBalance value={sumReceived - sumPaid} />
         <BalanceSplite sumPaid={sumPaid} sumReceived={sumReceived} />
         <View>
           <View>
@@ -119,9 +120,10 @@ const Home = ({navigation}: any, props: Props) => {
               lists
                 .slice(0)
                 .reverse()
-                .map((list: any) => {
+                .map((list: any, index: number) => {
                   return (
                     <Pressable
+                      key={`list-${index}`}
                       onPress={() => {
                         navigation.navigate('MoreInfomation', {
                           id: list.id,
@@ -131,7 +133,7 @@ const Home = ({navigation}: any, props: Props) => {
                           status: list.status,
                         });
                       }}>
-                      <Cardlist value={list} key={list.id} />
+                      <Cardlist value={list} />
                     </Pressable>
                   );
                 })
@@ -150,16 +152,17 @@ const Home = ({navigation}: any, props: Props) => {
           right: 0,
           bottom: 0,
           flexDirection: 'row',
+
           justifyContent: 'space-evenly',
         }}>
         <View
-          style={{flex: 0.5, backgroundColor: '#ff6961', alignItems: 'center'}}>
+          style={{flex: 0.5, backgroundColor: '#FF6D60', alignItems: 'center'}}>
           <Text style={{fontSize: 20, color: 'white'}} onPress={PaidPage}>
             จ่าย
           </Text>
         </View>
         <View
-          style={{flex: 0.5, backgroundColor: '#92CEA8', alignItems: 'center'}}>
+          style={{flex: 0.5, backgroundColor: '#98D8AA', alignItems: 'center'}}>
           <Text style={{fontSize: 20, color: 'white'}} onPress={ReceivedPage}>
             รับ
           </Text>

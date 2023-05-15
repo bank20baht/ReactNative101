@@ -23,15 +23,17 @@ const App = (props: Props) => {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{
+          options={({navigation}) => ({
             title: 'My Wallet',
             headerTitleStyle: {
               color: 'white',
             },
             headerStyle: {
-              backgroundColor: '#92CEA8',
+              backgroundColor: '#644536',
             },
-          }}
+            headerTitleAlign: 'center',
+            headerLeft: () => null, // Remove the back button
+          })}
         />
         <Stack.Screen
           name="Paid"
@@ -44,6 +46,7 @@ const App = (props: Props) => {
             headerStyle: {
               backgroundColor: '#ff6961',
             },
+            headerTitleAlign: 'center',
           }}
         />
         <Stack.Screen
@@ -57,6 +60,7 @@ const App = (props: Props) => {
             headerStyle: {
               backgroundColor: '#92CEA8',
             },
+            headerTitleAlign: 'center',
           }}
         />
         <Stack.Screen
@@ -70,6 +74,7 @@ const App = (props: Props) => {
             headerStyle: {
               backgroundColor: '#E57734',
             },
+            headerTitleAlign: 'center',
           }}
         />
       </Stack.Navigator>

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TextInput} from 'react-native';
+import {StyleSheet, Text, View, TextInput, StatusBar} from 'react-native';
 import React from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {Formik} from 'formik';
@@ -73,6 +73,7 @@ const Received = ({navigation}: any, props: Props) => {
       validationSchema={validationSchema}>
       {({handleChange, handleSubmit, values}) => (
         <View style={{flex: 1}}>
+          <StatusBar barStyle="light-content" backgroundColor="#98D8AA" />
           <View
             style={{
               flexDirection: 'row',

@@ -13,15 +13,17 @@ const BalanceSplit = (props: Props) => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-evenly',
-          margin: 10,
+          backgroundColor: '#FFBF9B',
         }}>
         <View style={{alignItems: 'center', flex: 0.5}}>
-          <Text>รวมรายจ่าย</Text>
-          <Text>{props.sumPaid} บาท</Text>
+          <Text style={{color: 'red'}}>รวมรายจ่าย</Text>
+          <Text style={{color: 'red', fontSize: 20}}>{props.sumPaid} บาท</Text>
         </View>
         <View style={{alignItems: 'center', flex: 0.5}}>
-          <Text>รวมรายรับ</Text>
-          <Text>{props.sumReceived} บาท</Text>
+          <Text style={{color: 'green'}}>รวมรายรับ</Text>
+          <Text style={{color: 'green', fontSize: 20}}>
+            {props.sumReceived} บาท
+          </Text>
         </View>
       </View>
     </View>
