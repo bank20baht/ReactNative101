@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import Splash from './screens/Splash';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -7,6 +7,7 @@ import Home from './screens/Home';
 import Paid from './screens/Paid';
 import Received from './screens/Received';
 import MoreInfomation from './screens/MoreInfomation';
+import ListItem from './screens/ListItem';
 const Stack = createNativeStackNavigator();
 
 type Props = {};
@@ -15,11 +16,6 @@ const App = (props: Props) => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
-          name="Splash"
-          component={Splash}
-          options={{headerShown: false}}
-        />
         <Stack.Screen
           name="Home"
           component={Home}
@@ -74,6 +70,14 @@ const App = (props: Props) => {
             headerStyle: {
               backgroundColor: '#E57734',
             },
+            headerTitleAlign: 'center',
+          }}
+        />
+        <Stack.Screen
+          name="Listitem"
+          component={ListItem}
+          options={{
+            title: 'Choose items',
             headerTitleAlign: 'center',
           }}
         />

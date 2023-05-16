@@ -24,6 +24,10 @@ const validationSchema = object().shape({
 });
 
 const Received = ({navigation}: any, props: Props) => {
+  const itemListPage = () => {
+    navigation.navigate('Listitem');
+  };
+
   const initialValues = {
     amount: '',
     listName: '',
@@ -122,6 +126,9 @@ const Received = ({navigation}: any, props: Props) => {
               textAlignVertical="top"
               textAlign="left"
             />
+          </View>
+          <View>
+            <Text onPress={itemListPage}>Choose item page</Text>
           </View>
           <View
             style={{

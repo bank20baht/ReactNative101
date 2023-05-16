@@ -70,7 +70,7 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
     <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
       {({handleChange, handleSubmit, values}) => (
         <View style={{flex: 1}}>
-          <StatusBar barStyle="light-content" backgroundColor="#98D8AA" />
+          <StatusBar barStyle="light-content" backgroundColor="#E57734" />
           <View
             style={{
               flexDirection: 'row',
