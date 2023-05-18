@@ -3,6 +3,7 @@ import React from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {Formik} from 'formik';
 import {number, object, string} from 'yup';
+
 type Props = {};
 
 const db = SQLite.openDatabase(
@@ -14,7 +15,7 @@ const db = SQLite.openDatabase(
     console.log('Database opened successfully');
   },
   error => {
-    console.error('Faild to open database: ', error);
+    console.error('Failed to open database: ', error);
   },
 );
 
@@ -24,10 +25,6 @@ const validationSchema = object().shape({
 });
 
 const Received = ({navigation}: any, props: Props) => {
-  const itemListPage = () => {
-    navigation.navigate('Listitem');
-  };
-
   const initialValues = {
     amount: '',
     listName: '',
@@ -126,9 +123,6 @@ const Received = ({navigation}: any, props: Props) => {
               textAlignVertical="top"
               textAlign="left"
             />
-          </View>
-          <View>
-            <Text onPress={itemListPage}>Choose item page</Text>
           </View>
           <View
             style={{

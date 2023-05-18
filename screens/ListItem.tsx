@@ -1,4 +1,11 @@
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React from 'react';
 import ItemList from '../components/itemsList';
 
@@ -40,7 +47,9 @@ const ListItem: React.FC<Props> = ({navigation}: any) => {
             <Pressable
               key={index}
               onPress={() => {
-                navigation.navigate('Home');
+                navigation.navigate('Paid', {
+                  value: item.value,
+                });
               }}>
               <ItemList value={item} />
             </Pressable>

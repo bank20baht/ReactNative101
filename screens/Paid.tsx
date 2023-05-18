@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, TextInput, StatusBar} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  StatusBar,
+  Button,
+} from 'react-native';
 import React from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {ErrorMessage, Formik} from 'formik';
@@ -17,7 +24,13 @@ const db = SQLite.openDatabase(
   },
 );
 
-const Paid = ({navigation}: any) => {
+const Paid = ({route, navigation}: any) => {
+  const {value} = route.params || '';
+  console.log(value);
+  const itemListPage = () => {
+    navigation.navigate('Listitem');
+  };
+
   const initialValues = {
     amount: '',
     listName: '',
@@ -30,10 +43,7 @@ const Paid = ({navigation}: any) => {
     listName: string()
       .matches(/^[a-zA-Zก-๙]+$/, 'ชื่อรายการต้องเป็นตัวอักษรเท่านั้น')
       .required('จำเป็นต้องระบุชื่อรายการ'),
-    info: string().matches(
-      /^[a-zA-Zก-๙]+$/,
-      'ชื่อข้อมูลเพิ่มเติมต้องเป็นตัวอักษรเท่านั้น',
-    ),
+    info: string(),
   });
 
   const handleFormSubmit = (values: any) => {
@@ -92,6 +102,7 @@ const Paid = ({navigation}: any) => {
               value={values.amount}
               textAlign="right"
               keyboardType="numeric"
+              placeholder="0.00"
             />
           </View>
           <View
@@ -107,6 +118,13 @@ const Paid = ({navigation}: any) => {
               value={values.listName}
               textAlign="right"
             />
+          </View>
+          <View
+            style={{
+              alignItems: 'flex-end',
+              padding: 5,
+            }}>
+            <Text onPress={itemListPage}>Choose item page</Text>
           </View>
           <View
             style={{

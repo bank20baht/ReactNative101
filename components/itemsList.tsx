@@ -4,8 +4,13 @@ import React from 'react';
 const itemsList = (props: any) => {
   const {value} = props.value;
   return (
-    <View>
-      <Text style={{color: 'black'}}>{value}</Text>
+    <View
+      style={{
+        padding: 5,
+        margin: 2,
+        backgroundColor: 'white',
+      }}>
+      <Text style={{color: 'black', fontSize: 20}}>{value}</Text>
     </View>
   );
 };
