@@ -118,7 +118,7 @@ const Home = ({navigation}: any, props: Props) => {
   return (
     <View style={{flex: 1, backgroundColor: '#F9FBE7'}}>
       <StatusBar barStyle="light-content" backgroundColor="#644536" />
-      <ScrollView>
+      <ScrollView style={{flex: 0.95}}>
         <CardBalance value={sumReceived - sumPaid} />
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <PieChart
@@ -135,8 +135,9 @@ const Home = ({navigation}: any, props: Props) => {
         <BalanceSplite sumPaid={sumPaid} sumReceived={sumReceived} />
 
         <View>
-          {Object.entries<any[]>(groupedLists).map(
-            ([date, dateLists], index: number) => (
+          {Object.entries<any[]>(groupedLists)
+            .reverse()
+            .map(([date, dateLists], index: number) => (
               <React.Fragment key={`date-${index}`}>
                 <View
                   style={{
@@ -162,18 +163,14 @@ const Home = ({navigation}: any, props: Props) => {
                   </Pressable>
                 ))}
               </React.Fragment>
-            ),
-          )}
+            ))}
         </View>
       </ScrollView>
       <View
         style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
           flexDirection: 'row',
           justifyContent: 'space-evenly',
+          flex: 0.05,
         }}>
         <View
           style={{flex: 0.5, backgroundColor: '#FF6D60', alignItems: 'center'}}>

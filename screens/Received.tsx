@@ -1,8 +1,16 @@
-import {StyleSheet, Text, View, TextInput, StatusBar} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {Formik} from 'formik';
 import {number, object, string} from 'yup';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 type Props = {};
 
@@ -25,6 +33,9 @@ const validationSchema = object().shape({
 });
 
 const Received = ({navigation}: any, props: Props) => {
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
   const initialValues = {
     amount: '',
     listName: '',
@@ -40,7 +51,7 @@ const Received = ({navigation}: any, props: Props) => {
           values.amount,
           values.listName,
           values.info,
-          new Date(),
+          selectedDate.toISOString().split('T')[0],
           values.status,
         ],
         (_: any, result: any) => {
@@ -67,6 +78,20 @@ const Received = ({navigation}: any, props: Props) => {
     );
   });
 
+  const handleDateChange = (event: any, selected: Date | undefined) => {
+    const currentDate = selected || selectedDate;
+    setShowDatePicker(false);
+    setSelectedDate(currentDate);
+  };
+
+  const formatDate = (date: Date) => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear().toString().slice(-2);
+
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -75,13 +100,8 @@ const Received = ({navigation}: any, props: Props) => {
       {({handleChange, handleSubmit, values}) => (
         <View style={{flex: 1}}>
           <StatusBar barStyle="light-content" backgroundColor="#98D8AA" />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              padding: 10,
-            }}>
-            <Text style={{width: '50%'}}>จำนวนเงิน</Text>
+          <View style={styles.row}>
+            <Text style={styles.label}>จำนวนเงิน</Text>
             <TextInput
               style={styles.input}
               onChangeText={handleChange('amount')}
@@ -90,13 +110,8 @@ const Received = ({navigation}: any, props: Props) => {
               keyboardType="numeric"
             />
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              padding: 10,
-            }}>
-            <Text>ชื่อรายการ</Text>
+          <View style={styles.row}>
+            <Text style={styles.label}>ชื่อรายการ</Text>
             <TextInput
               style={styles.input}
               onChangeText={handleChange('listName')}
@@ -104,15 +119,24 @@ const Received = ({navigation}: any, props: Props) => {
               textAlign="right"
             />
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              padding: 10,
-            }}>
-            <Text>วันที่</Text>
-            <Text>{new Date().toString()}</Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>วันที่</Text>
+            <TouchableOpacity
+              style={{
+                alignContent: 'flex-end',
+              }}
+              onPress={() => setShowDatePicker(true)}>
+              <Text>{formatDate(selectedDate)}</Text>
+            </TouchableOpacity>
           </View>
+          {showDatePicker && (
+            <DateTimePicker
+              value={selectedDate}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
           <View style={{padding: 10}}>
             <Text>รายละเอียดเพิ่มเติม</Text>
             <TextInput
@@ -124,20 +148,8 @@ const Received = ({navigation}: any, props: Props) => {
               textAlign="left"
             />
           </View>
-          <View
-            style={{
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              bottom: 0,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              padding: 5,
-              backgroundColor: '#92CEA8',
-            }}>
-            <Text
-              style={{fontSize: 20, color: '#ffffff'}}
-              onPress={handleSubmit}>
+          <View style={styles.buttonContainer}>
+            <Text style={styles.button} onPress={handleSubmit}>
               บันทึก
             </Text>
           </View>
@@ -150,11 +162,39 @@ const Received = ({navigation}: any, props: Props) => {
 export default Received;
 
 const styles = StyleSheet.create({
-  input: {
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    alignItems: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  label: {
     width: '50%',
+  },
+  input: {
+    flex: 1,
     borderWidth: 1,
   },
   textarea: {
     borderWidth: 1,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 5,
+    backgroundColor: '#92CEA8',
+  },
+  button: {
+    fontSize: 20,
+    color: '#ffffff',
   },
 });
