@@ -1,10 +1,10 @@
-import {View, Text, ScrollView, Pressable, StatusBar} from 'react-native';
 import React, {useState} from 'react';
+import {View, Text, ScrollView, Pressable, StatusBar} from 'react-native';
 import SQLite from 'react-native-sqlite-storage';
 import CardBalance from '../components/CardBalance';
 import BalanceSplite from '../components/BalanceSplit';
 import Cardlist from '../components/Cardlist';
-import {useFocusEffect, useRoute} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import {PieChart} from 'react-native-chart-kit';
 
 type Props = {};
@@ -18,7 +18,7 @@ const db = SQLite.openDatabase(
     console.log('Database opened successfully');
   },
   error => {
-    console.error('Faild to open database: ', error);
+    console.error('Failed to open database: ', error);
   },
 );
 
@@ -96,6 +96,25 @@ const Home = ({navigation}: any, props: Props) => {
       color: '#98D8AA',
     },
   ];
+
+  const groupListsByDate = (list: any[]) => {
+    const groupedLists: {[key: string]: any[]} = {};
+
+    for (const item of list) {
+      const date = new Date(item.date).toDateString();
+
+      if (groupedLists[date]) {
+        groupedLists[date].push(item);
+      } else {
+        groupedLists[date] = [item];
+      }
+    }
+
+    return groupedLists;
+  };
+
+  const groupedLists = groupListsByDate(lists);
+
   return (
     <View style={{flex: 1, backgroundColor: '#F9FBE7'}}>
       <StatusBar barStyle="light-content" backgroundColor="#644536" />
@@ -114,35 +133,37 @@ const Home = ({navigation}: any, props: Props) => {
         </View>
 
         <BalanceSplite sumPaid={sumPaid} sumReceived={sumReceived} />
+
         <View>
-          <View>
-            {lists ? (
-              lists
-                .slice(0)
-                .reverse()
-                .map((list: any, index: number) => {
-                  return (
-                    <Pressable
-                      key={`list-${index}`}
-                      onPress={() => {
-                        navigation.navigate('MoreInfomation', {
-                          id: list.id,
-                          amount: list.amount,
-                          listName: list.listName,
-                          info: list.info,
-                          status: list.status,
-                        });
-                      }}>
-                      <Cardlist value={list} />
-                    </Pressable>
-                  );
-                })
-            ) : (
-              <View>
-                <Text>No list found in datase.</Text>
-              </View>
-            )}
-          </View>
+          {Object.entries<any[]>(groupedLists).map(
+            ([date, dateLists], index: number) => (
+              <React.Fragment key={`date-${index}`}>
+                <View
+                  style={{
+                    borderTopWidth: 1,
+                    borderTopColor: 'gray',
+                    backgroundColor: 'white',
+                  }}>
+                  <Text style={{fontWeight: 'bold'}}>{date}</Text>
+                </View>
+                {dateLists.map((list: any, listIndex: number) => (
+                  <Pressable
+                    key={`list-${index}-${listIndex}`}
+                    onPress={() => {
+                      navigation.navigate('MoreInfomation', {
+                        id: list.id,
+                        amount: list.amount,
+                        listName: list.listName,
+                        info: list.info,
+                        status: list.status,
+                      });
+                    }}>
+                    <Cardlist value={list} />
+                  </Pressable>
+                ))}
+              </React.Fragment>
+            ),
+          )}
         </View>
       </ScrollView>
       <View
@@ -152,7 +173,6 @@ const Home = ({navigation}: any, props: Props) => {
           right: 0,
           bottom: 0,
           flexDirection: 'row',
-
           justifyContent: 'space-evenly',
         }}>
         <View
