@@ -7,7 +7,8 @@ import Home from './screens/Home';
 import Paid from './screens/Paid';
 import Received from './screens/Received';
 import MoreInfomation from './screens/MoreInfomation';
-import ListItem from './screens/ListItem';
+import ListItemPaid from './screens/ListItemPaid';
+import ListItemRecive from './screens/ListItemRecive';
 const Stack = createNativeStackNavigator();
 
 type Props = {};
@@ -74,11 +75,31 @@ const App = (props: Props) => {
           }}
         />
         <Stack.Screen
-          name="Listitem"
-          component={ListItem}
+          name="ListitemPaid"
+          component={ListItemPaid}
           options={{
             title: 'Choose items',
+            headerTitleStyle: {
+              color: 'white',
+            },
             headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: '#ff6961',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="ListItemRecive"
+          component={ListItemRecive}
+          options={{
+            title: 'Choose items',
+            headerTitleStyle: {
+              color: 'white',
+            },
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: '#98D8AA',
+            },
           }}
         />
       </Stack.Navigator>

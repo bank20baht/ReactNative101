@@ -1,8 +1,16 @@
-import {StyleSheet, Text, View, TextInput, StatusBar} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {ErrorMessage, Formik} from 'formik';
 import {number, object, string} from 'yup';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const db = SQLite.openDatabase(
   {
@@ -19,6 +27,8 @@ const db = SQLite.openDatabase(
 
 const MoreInfomation = ({route, navigation}: any, props: any) => {
   const {id, amount, listName, info, status} = route.params;
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
   console.log(route.params);
   const initialValues = {
     amount: amount.toString(),
@@ -66,6 +76,20 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
     navigation.navigate('Home');
   };
 
+  const handleDateChange = (event: any, selected: Date | undefined) => {
+    const currentDate = selected || selectedDate;
+    setShowDatePicker(false);
+    setSelectedDate(currentDate);
+  };
+
+  const formatDate = (date: Date) => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear().toString().slice(-2);
+
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
       {({handleChange, handleSubmit, values}) => (
@@ -107,8 +131,22 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
               padding: 10,
             }}>
             <Text>วันที่</Text>
-            <Text>{new Date().toString()}</Text>
+            <TouchableOpacity
+              style={{
+                alignContent: 'flex-end',
+              }}
+              onPress={() => setShowDatePicker(true)}>
+              <Text>{formatDate(selectedDate)}</Text>
+            </TouchableOpacity>
           </View>
+          {showDatePicker && (
+            <DateTimePicker
+              value={selectedDate}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
           <View style={{padding: 10}}>
             <Text>รายละเอียดเพิ่มเติม</Text>
             <TextInput

@@ -141,8 +141,6 @@ const Home = ({navigation}: any, props: Props) => {
               <React.Fragment key={`date-${index}`}>
                 <View
                   style={{
-                    borderTopWidth: 1,
-                    borderTopColor: 'gray',
                     backgroundColor: 'white',
                   }}>
                   <Text style={{fontWeight: 'bold'}}>{date}</Text>

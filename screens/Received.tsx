@@ -6,7 +6,7 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
 import {Formik} from 'formik';
 import {number, object, string} from 'yup';
@@ -27,18 +27,25 @@ const db = SQLite.openDatabase(
   },
 );
 
-const validationSchema = object().shape({
-  amount: number().required(),
-  listName: string().required(),
-});
-
-const Received = ({navigation}: any, props: Props) => {
+const Received = ({route, navigation}: any, props: Props) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [chooseItem, setChooseItem] = useState('');
+  const {value} = route.params || '';
+
+  const itemListPage = () => {
+    navigation.navigate('ListItemRecive');
+  };
+
+  useEffect(() => {
+    // Update chooseItem when the value from route.params changes
+    if (value) {
+      setChooseItem(value);
+    }
+  }, [value]);
 
   const initialValues = {
     amount: '',
-    listName: '',
     info: '',
     status: 'Received',
   };
@@ -49,7 +56,7 @@ const Received = ({navigation}: any, props: Props) => {
         'INSERT INTO expenses (amount, listName, info, date, status) VALUES (?, ?, ?, ?, ?)',
         [
           values.amount,
-          values.listName,
+          chooseItem,
           values.info,
           selectedDate.toISOString().split('T')[0],
           values.status,
@@ -93,10 +100,7 @@ const Received = ({navigation}: any, props: Props) => {
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleFormSubmit}
-      validationSchema={validationSchema}>
+    <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
       {({handleChange, handleSubmit, values}) => (
         <View style={{flex: 1}}>
           <StatusBar barStyle="light-content" backgroundColor="#98D8AA" />
@@ -112,12 +116,13 @@ const Received = ({navigation}: any, props: Props) => {
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>ชื่อรายการ</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={handleChange('listName')}
-              value={values.listName}
-              textAlign="right"
-            />
+            <View>
+              {chooseItem ? (
+                <Text>{chooseItem}</Text>
+              ) : (
+                <Text onPress={itemListPage}>go to choose page</Text>
+              )}
+            </View>
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>วันที่</Text>
