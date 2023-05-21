@@ -9,11 +9,17 @@ import Received from './screens/Received';
 import MoreInfomation from './screens/MoreInfomation';
 import ListItemPaid from './screens/ListItemPaid';
 import ListItemRecive from './screens/ListItemRecive';
+
+import SplashScreen from 'react-native-splash-screen';
+
 const Stack = createNativeStackNavigator();
 
 type Props = {};
 
 const App = (props: Props) => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator>
