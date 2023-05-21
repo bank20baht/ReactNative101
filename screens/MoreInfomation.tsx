@@ -101,7 +101,7 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
               justifyContent: 'space-between',
               padding: 10,
             }}>
-            <Text style={{width: '50%'}}>จำนวนเงิน</Text>
+            <Text style={styles.label}>จำนวนเงิน</Text>
             <TextInput
               style={styles.input}
               onChangeText={handleChange('amount')}
@@ -110,13 +110,14 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
               keyboardType="numeric"
             />
           </View>
+          <View style={styles.lineStyle} />
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               padding: 10,
             }}>
-            <Text>ชื่อรายการ</Text>
+            <Text style={styles.label}>ชื่อรายการ</Text>
             <TextInput
               style={styles.input}
               onChangeText={handleChange('listName')}
@@ -124,13 +125,14 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
               textAlign="right"
             />
           </View>
+          <View style={styles.lineStyle} />
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               padding: 10,
             }}>
-            <Text>วันที่</Text>
+            <Text style={styles.label}>วันที่</Text>
             <TouchableOpacity
               style={{
                 alignContent: 'flex-end',
@@ -147,8 +149,9 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
               onChange={handleDateChange}
             />
           )}
+          <View style={styles.lineStyle} />
           <View style={{padding: 10}}>
-            <Text>รายละเอียดเพิ่มเติม</Text>
+            <Text style={styles.label}>รายละเอียดเพิ่มเติม</Text>
             <TextInput
               style={styles.textarea}
               numberOfLines={4}
@@ -201,11 +204,22 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
 export default MoreInfomation;
 
 const styles = StyleSheet.create({
-  input: {
+  label: {
     width: '50%',
-    borderWidth: 1,
+    fontSize: 20,
+  },
+  input: {
+    flex: 1,
+    padding: 5,
+    fontSize: 20,
   },
   textarea: {
-    borderWidth: 1,
+    padding: 5,
+    fontSize: 20,
+  },
+  lineStyle: {
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    margin: 5,
   },
 });

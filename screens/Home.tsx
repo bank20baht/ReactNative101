@@ -16,8 +16,21 @@ const db = SQLite.openDatabase(
   },
   () => {
     console.log('Database opened successfully');
+    // Create the "expenses" table if it doesn't exist
+    db.transaction((tx: any) => {
+      tx.executeSql(
+        'CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, amount REAL, listName TEXT, info TEXT, status TEXT, date TEXT)',
+        [],
+        (_: any, result: any) => {
+          console.log('Table created successfully');
+        },
+        (_: any, error: any) => {
+          console.error('Failed to create table: ', error);
+        },
+      );
+    });
   },
-  error => {
+  (error: any) => {
     console.error('Failed to open database: ', error);
   },
 );

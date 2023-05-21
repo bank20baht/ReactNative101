@@ -112,8 +112,10 @@ const Received = ({route, navigation}: any, props: Props) => {
               value={values.amount}
               textAlign="right"
               keyboardType="numeric"
+              placeholder="0.00"
             />
           </View>
+          <View style={styles.lineStyle} />
           <View style={styles.row}>
             <Text style={styles.label}>ชื่อรายการ</Text>
             <View>
@@ -124,6 +126,7 @@ const Received = ({route, navigation}: any, props: Props) => {
               )}
             </View>
           </View>
+          <View style={styles.lineStyle} />
           <View style={styles.inputContainer}>
             <Text style={styles.label}>วันที่</Text>
             <TouchableOpacity
@@ -142,8 +145,9 @@ const Received = ({route, navigation}: any, props: Props) => {
               onChange={handleDateChange}
             />
           )}
+          <View style={styles.lineStyle} />
           <View style={{padding: 10}}>
-            <Text>รายละเอียดเพิ่มเติม</Text>
+            <Text style={styles.label}>รายละเอียดเพิ่มเติม</Text>
             <TextInput
               style={styles.textarea}
               numberOfLines={4}
@@ -180,14 +184,13 @@ const styles = StyleSheet.create({
   },
   label: {
     width: '50%',
+    fontSize: 20,
   },
   input: {
-    flex: 1,
-    borderWidth: 1,
+    padding: 5,
+    fontSize: 20,
   },
-  textarea: {
-    borderWidth: 1,
-  },
+  textarea: {},
   buttonContainer: {
     position: 'absolute',
     left: 0,
@@ -201,5 +204,10 @@ const styles = StyleSheet.create({
   button: {
     fontSize: 20,
     color: '#ffffff',
+  },
+  lineStyle: {
+    borderWidth: 0.2,
+    borderColor: 'gray',
+    margin: 5,
   },
 });
