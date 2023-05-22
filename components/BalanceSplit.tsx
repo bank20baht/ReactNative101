@@ -22,7 +22,13 @@ const BalanceSplit = (props: Props) => {
           <Text style={{color: 'red'}}>รวมรายจ่าย</Text>
           <Text style={{color: 'red', fontSize: 20}}>{props.sumPaid} บาท</Text>
         </View>
-        <View style={{alignItems: 'center', flex: 0.5}}>
+        <View
+          style={{
+            alignItems: 'center',
+            flex: 0.5,
+            borderLeftWidth: 1,
+            borderLeftColor: '#644536',
+          }}>
           <Text style={{color: 'green'}}>รวมรายรับ</Text>
           <Text style={{color: 'green', fontSize: 20}}>
             {props.sumReceived} บาท

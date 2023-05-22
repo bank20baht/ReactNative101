@@ -12,7 +12,8 @@ import SQLite from 'react-native-sqlite-storage';
 import {Formik} from 'formik';
 import {number, object, string} from 'yup';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 type Props = {};
 
 const db = SQLite.openDatabase(
@@ -103,10 +104,18 @@ const Received = ({route, navigation}: any, props: Props) => {
   return (
     <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
       {({handleChange, handleSubmit, values}) => (
-        <View style={{flex: 1}}>
-          <StatusBar barStyle="light-content" backgroundColor="#98D8AA" />
+        <View
+          style={{
+            flex: 1,
+            //backgroundColor: '#F9FBE7'
+            backgroundColor: '#ffecc9',
+          }}>
+          <StatusBar barStyle="light-content" backgroundColor="#92CEA8" />
           <View style={styles.row}>
-            <Text style={styles.label}>จำนวนเงิน</Text>
+            <View style={{flexDirection: 'row', paddingLeft: 5}}>
+              <FontAwesome5 name="coins" color={'gray'} size={20} />
+              <Text style={styles.label}>จำนวนเงิน</Text>
+            </View>
             <TextInput
               style={styles.input}
               onChangeText={handleChange('amount')}
@@ -118,25 +127,45 @@ const Received = ({route, navigation}: any, props: Props) => {
           </View>
           <View style={styles.lineStyle} />
           <View style={styles.row}>
-            <Text style={styles.label}>ชื่อรายการ</Text>
-            <View>
-              {chooseItem ? (
-                <Text>{chooseItem}</Text>
-              ) : (
-                <Text onPress={itemListPage}>go to choose page</Text>
-              )}
+            <View style={{flexDirection: 'row', paddingLeft: 5}}>
+              <FontAwesome5
+                name="file-invoice-dollar"
+                color={'gray'}
+                size={20}
+              />
+              <Text style={styles.label}>ชื่อรายการ</Text>
+            </View>
+            <View style={{flexDirection: 'row', paddingRight: 5}}>
+              <View>
+                {chooseItem ? (
+                  <Text onPress={itemListPage} style={{paddingRight: 5}}>
+                    {chooseItem}
+                  </Text>
+                ) : (
+                  <Text onPress={itemListPage} style={{paddingRight: 5}}>
+                    เลือก
+                  </Text>
+                )}
+              </View>
+              <FontAwesome5 name="angle-right" color={'gray'} size={20} />
             </View>
           </View>
           <View style={styles.lineStyle} />
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>วันที่</Text>
-            <TouchableOpacity
+            <View style={{flexDirection: 'row'}}>
+              <AntDesign name="calendar" color={'gray'} size={20} />
+              <Text style={styles.label}>วันที่</Text>
+            </View>
+            <Pressable
               style={{
                 alignContent: 'flex-end',
+                flexDirection: 'row',
+                paddingRight: 5,
               }}
               onPress={() => setShowDatePicker(true)}>
-              <Text>{formatDate(selectedDate)}</Text>
-            </TouchableOpacity>
+              <Text style={{paddingRight: 5}}>{formatDate(selectedDate)}</Text>
+              <FontAwesome5 name="angle-right" color={'gray'} size={20} />
+            </Pressable>
           </View>
           {showDatePicker && (
             <DateTimePicker
@@ -148,7 +177,11 @@ const Received = ({route, navigation}: any, props: Props) => {
           )}
           <View style={styles.lineStyle} />
           <View style={{padding: 10}}>
-            <Text style={styles.label}>รายละเอียดเพิ่มเติม</Text>
+            <View style={{flexDirection: 'row'}}>
+              <AntDesign name="profile" color={'gray'} size={20} />
+              <Text style={styles.label}>รายละเอียดเพิ่มเติม</Text>
+            </View>
+
             <TextInput
               style={styles.textarea}
               numberOfLines={4}
@@ -186,12 +219,19 @@ const styles = StyleSheet.create({
   label: {
     width: '50%',
     fontSize: 20,
+    paddingLeft: 8,
   },
   input: {
     padding: 5,
     fontSize: 20,
   },
-  textarea: {},
+  textarea: {
+    padding: 5,
+    fontSize: 20,
+    borderWidth: 1,
+    margin: 5,
+    borderColor: 'gray',
+  },
   buttonContainer: {
     position: 'absolute',
     left: 0,

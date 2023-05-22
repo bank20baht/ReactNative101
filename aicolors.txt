@@ -1,0 +1,11 @@
+    --primary-100:#8B4513;
+    --primary-200:#61300D;
+    --primary-300:#E68946;
+    --accent-100:#ff672a;
+    --accent-200:#ff7a45;
+    --text-100:#000000;
+    --text-200:#817a73;
+    --bg-100:#f7e1b8;
+    --bg-200:#ffecc9;
+    --bg-300:#eeddaf;
+      

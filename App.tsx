@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './screens/Home';
@@ -14,10 +14,39 @@ const Stack = createNativeStackNavigator();
 
 type Props = {};
 
+const getCurrentMonthYear = () => {
+  const now = new Date();
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  const month = monthNames[now.getMonth()];
+  const year = now.getFullYear();
+  return `${month} ${year}`;
+};
+
 const App = (props: Props) => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
+
+  const [title, setTitle] = useState('');
+
+  useEffect(() => {
+    SplashScreen.hide();
+    setTitle(getCurrentMonthYear());
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -25,9 +54,9 @@ const App = (props: Props) => {
           name="Home"
           component={Home}
           options={({navigation}) => ({
-            title: 'My Wallet',
+            title: title,
             headerTitleStyle: {
-              color: 'white',
+              color: '#E68946',
             },
             headerStyle: {
               backgroundColor: '#644536',

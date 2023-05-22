@@ -11,15 +11,29 @@ const CardBalance = (props: Props) => {
       <View
         style={{
           alignItems: 'center',
-          backgroundColor: '#FFBF9B',
+          //backgroundColor: '#FFBF9B',
+          backgroundColor: '#644536',
           padding: 10,
           borderColor: 'black',
           borderRadius: 8,
           borderBottomRightRadius: 0,
           borderBottomLeftRadius: 0,
         }}>
-        <Text style={{color: '#4D4D4D'}}>จำนวนเงินคงเหลือ</Text>
-        <Text style={{fontSize: 30, color: '#4D4D4D'}}>{props.value} บาท</Text>
+        <Text
+          style={{
+            //color: '#4D4D4D'
+            color: '#E68946',
+          }}>
+          จำนวนเงินคงเหลือ
+        </Text>
+        <Text
+          style={{
+            fontSize: 30,
+            //</View>color: '#4D4D4D',
+            color: '#E68946',
+          }}>
+          {props.value} บาท
+        </Text>
       </View>
     </View>
   );

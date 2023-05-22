@@ -51,9 +51,15 @@ const Home = ({navigation}: any, props: Props) => {
   const fetchData = async () => {
     return new Promise<void>((resolve, reject) => {
       db.transaction((tx: any) => {
+        const currentDate = new Date(); // Get the current date
+        const currentMonth = currentDate.getMonth() + 1; // Get the current month (1-indexed)
+        const currentYear = currentDate.getFullYear();
+        const currentMonthFormatted =
+          currentMonth < 10 ? `0${currentMonth}` : `${currentMonth}`;
+
         tx.executeSql(
-          'SELECT * FROM expenses',
-          [],
+          `SELECT * FROM expenses WHERE substr(date, 1, 7) = ?`,
+          [`${currentYear}-${currentMonthFormatted}`],
           (_: any, {rows}: any) => {
             console.log('Data retrieved successfully');
             setList(rows.raw());
@@ -129,7 +135,12 @@ const Home = ({navigation}: any, props: Props) => {
   const groupedLists = groupListsByDate(lists);
 
   return (
-    <View style={{flex: 1, backgroundColor: '#F9FBE7'}}>
+    <View
+      style={{
+        flex: 1,
+        //backgroundColor: '#F9FBE7'
+        backgroundColor: '#ffecc9',
+      }}>
       <StatusBar barStyle="light-content" backgroundColor="#644536" />
       <ScrollView style={{flex: 0.95}}>
         <View
@@ -172,23 +183,37 @@ const Home = ({navigation}: any, props: Props) => {
                 shadowRadius: 4,
                 elevation: 2,
                 margin: 5,
+                borderColor: '#8B4513',
+                borderWidth: 2,
               }}>
-              {Object.entries<any[]>(groupedLists)
-                .reverse()
-                .map(([date, dateLists], index: number) => (
+              <View
+                style={{
+                  borderRadius: 8,
+                  borderBottomRightRadius: 0,
+                  borderBottomLeftRadius: 0,
+                  backgroundColor: '#644536',
+                }}>
+                <Text
+                  style={{
+                    //color: '#4D4D4D'
+                    color: '#E68946',
+                    textAlign: 'center',
+                  }}>
+                  รายการ
+                </Text>
+              </View>
+              {Object.entries<any[]>(groupedLists).map(
+                ([date, dateLists], index: number) => (
                   <React.Fragment key={`date-${index}`}>
                     <View
                       style={{
                         backgroundColor: '#FFBF9B',
-                        borderRadius: 8,
-                        borderBottomRightRadius: 0,
-                        borderBottomLeftRadius: 0,
                       }}>
                       <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
                         {date}
                       </Text>
                     </View>
-                    {dateLists.map((list: any, listIndex: number) => (
+                    {dateLists.reverse().map((list: any, listIndex: number) => (
                       <Pressable
                         key={`list-${index}-${listIndex}`}
                         onPress={() => {
@@ -204,7 +229,8 @@ const Home = ({navigation}: any, props: Props) => {
                       </Pressable>
                     ))}
                   </React.Fragment>
-                ))}
+                ),
+              )}
             </View>
           </View>
         ) : (
