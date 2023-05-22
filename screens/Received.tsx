@@ -5,6 +5,7 @@ import {
   TextInput,
   StatusBar,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
@@ -157,11 +158,11 @@ const Received = ({route, navigation}: any, props: Props) => {
               textAlign="left"
             />
           </View>
-          <View style={styles.buttonContainer}>
-            <Text style={styles.button} onPress={handleSubmit}>
-              บันทึก
-            </Text>
-          </View>
+          <Pressable style={styles.buttonContainer} onPress={handleSubmit}>
+            <View>
+              <Text style={styles.button}>บันทึก</Text>
+            </View>
+          </Pressable>
         </View>
       )}
     </Formik>

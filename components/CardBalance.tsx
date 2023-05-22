@@ -14,6 +14,9 @@ const CardBalance = (props: Props) => {
           backgroundColor: '#FFBF9B',
           padding: 10,
           borderColor: 'black',
+          borderRadius: 8,
+          borderBottomRightRadius: 0,
+          borderBottomLeftRadius: 0,
         }}>
         <Text style={{color: '#4D4D4D'}}>จำนวนเงินคงเหลือ</Text>
         <Text style={{fontSize: 30, color: '#4D4D4D'}}>{props.value} บาท</Text>

@@ -132,50 +132,93 @@ const Home = ({navigation}: any, props: Props) => {
     <View style={{flex: 1, backgroundColor: '#F9FBE7'}}>
       <StatusBar barStyle="light-content" backgroundColor="#644536" />
       <ScrollView style={{flex: 0.95}}>
-        <CardBalance value={sumReceived - sumPaid} />
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <PieChart
-            data={data}
-            width={300}
-            height={220}
-            chartConfig={chartConfig}
-            accessor="amount"
-            backgroundColor="transparent"
-            paddingLeft="15"
-          />
+        <View
+          style={{
+            backgroundColor: '#8B4513',
+            borderRadius: 8,
+            padding: 2,
+            shadowColor: '#000',
+            shadowOffset: {width: 0, height: 2},
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 2,
+            margin: 5,
+          }}>
+          <CardBalance value={sumReceived - sumPaid} />
+          <BalanceSplite sumPaid={sumPaid} sumReceived={sumReceived} />
         </View>
 
-        <BalanceSplite sumPaid={sumPaid} sumReceived={sumReceived} />
-
-        <View>
-          {Object.entries<any[]>(groupedLists)
-            .reverse()
-            .map(([date, dateLists], index: number) => (
-              <React.Fragment key={`date-${index}`}>
-                <View
-                  style={{
-                    backgroundColor: 'white',
-                  }}>
-                  <Text style={{fontWeight: 'bold'}}>{date}</Text>
-                </View>
-                {dateLists.map((list: any, listIndex: number) => (
-                  <Pressable
-                    key={`list-${index}-${listIndex}`}
-                    onPress={() => {
-                      navigation.navigate('MoreInfomation', {
-                        id: list.id,
-                        amount: list.amount,
-                        listName: list.listName,
-                        info: list.info,
-                        status: list.status,
-                      });
-                    }}>
-                    <Cardlist value={list} />
-                  </Pressable>
+        {lists && lists.length > 0 ? (
+          <View>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <PieChart
+                data={data}
+                width={300}
+                height={220}
+                chartConfig={chartConfig}
+                accessor="amount"
+                backgroundColor="transparent"
+                paddingLeft="15"
+              />
+            </View>
+            <View
+              style={{
+                backgroundColor: '#ffecc9',
+                borderRadius: 8,
+                padding: 2,
+                shadowColor: '#000',
+                shadowOffset: {width: 0, height: 2},
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+                elevation: 2,
+                margin: 5,
+              }}>
+              {Object.entries<any[]>(groupedLists)
+                .reverse()
+                .map(([date, dateLists], index: number) => (
+                  <React.Fragment key={`date-${index}`}>
+                    <View
+                      style={{
+                        backgroundColor: '#FFBF9B',
+                        borderRadius: 8,
+                        borderBottomRightRadius: 0,
+                        borderBottomLeftRadius: 0,
+                      }}>
+                      <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
+                        {date}
+                      </Text>
+                    </View>
+                    {dateLists.map((list: any, listIndex: number) => (
+                      <Pressable
+                        key={`list-${index}-${listIndex}`}
+                        onPress={() => {
+                          navigation.navigate('MoreInfomation', {
+                            id: list.id,
+                            amount: list.amount,
+                            listName: list.listName,
+                            info: list.info,
+                            status: list.status,
+                          });
+                        }}>
+                        <Cardlist value={list} />
+                      </Pressable>
+                    ))}
+                  </React.Fragment>
                 ))}
-              </React.Fragment>
-            ))}
-        </View>
+            </View>
+          </View>
+        ) : (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+              alignContent: 'center',
+            }}>
+            <Text>ไม่มีรายการในระบบ</Text>
+            <Text>สร้างรายรับรายจ่ายของคุณเลย</Text>
+          </View>
+        )}
       </ScrollView>
       <View
         style={{
@@ -183,18 +226,25 @@ const Home = ({navigation}: any, props: Props) => {
           justifyContent: 'space-evenly',
           flex: 0.05,
         }}>
-        <View
+        <Pressable
+          onPress={PaidPage}
           style={{flex: 0.5, backgroundColor: '#FF6D60', alignItems: 'center'}}>
-          <Text style={{fontSize: 20, color: 'white'}} onPress={PaidPage}>
-            จ่าย
-          </Text>
-        </View>
-        <View
-          style={{flex: 0.5, backgroundColor: '#98D8AA', alignItems: 'center'}}>
-          <Text style={{fontSize: 20, color: 'white'}} onPress={ReceivedPage}>
-            รับ
-          </Text>
-        </View>
+          <View>
+            <Text style={{fontSize: 20, color: 'white'}}>จ่าย</Text>
+          </View>
+        </Pressable>
+
+        <Pressable
+          onPress={ReceivedPage}
+          style={{
+            flex: 0.5,
+            backgroundColor: '#98D8AA',
+            alignItems: 'center',
+          }}>
+          <View>
+            <Text style={{fontSize: 20, color: 'white'}}>รับ</Text>
+          </View>
+        </Pressable>
       </View>
     </View>
   );

@@ -13,7 +13,10 @@ const BalanceSplit = (props: Props) => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-evenly',
-          backgroundColor: '#FFBF9B',
+          backgroundColor: '#ffecc9',
+          borderTopRightRadius: 0,
+          borderTopLeftRadius: 0,
+          borderRadius: 8,
         }}>
         <View style={{alignItems: 'center', flex: 0.5}}>
           <Text style={{color: 'red'}}>รวมรายจ่าย</Text>

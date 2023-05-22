@@ -1,6 +1,4 @@
-import {View, Text} from 'react-native';
 import React, {useEffect} from 'react';
-import Splash from './screens/Splash';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './screens/Home';
@@ -75,7 +73,7 @@ const App = (props: Props) => {
               color: 'white',
             },
             headerStyle: {
-              backgroundColor: '#E57734',
+              backgroundColor: '#644536',
             },
             headerTitleAlign: 'center',
           }}

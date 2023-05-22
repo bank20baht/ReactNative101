@@ -159,9 +159,9 @@ const Paid = ({route, navigation}: any, props: Props) => {
             />
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <Pressable style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonText}>บันทึก</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       )}
@@ -201,9 +201,7 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: '#ff6961',
   },
-  button: {
-    padding: 10,
-  },
+  button: {},
   buttonText: {
     fontSize: 20,
     color: '#ffffff',

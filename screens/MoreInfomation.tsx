@@ -5,6 +5,7 @@ import {
   TextInput,
   StatusBar,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import React, {useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
@@ -29,7 +30,7 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
   const {id, amount, listName, info, status} = route.params;
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  console.log(route.params);
+
   const initialValues = {
     amount: amount.toString(),
     listName: listName.toString(),
@@ -94,7 +95,7 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
     <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
       {({handleChange, handleSubmit, values}) => (
         <View style={{flex: 1}}>
-          <StatusBar barStyle="light-content" backgroundColor="#E57734" />
+          <StatusBar barStyle="light-content" backgroundColor="#644536" />
           <View
             style={{
               flexDirection: 'row',
@@ -118,12 +119,9 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
               padding: 10,
             }}>
             <Text style={styles.label}>ชื่อรายการ</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={handleChange('listName')}
-              value={values.listName}
-              textAlign="right"
-            />
+            <View>
+              <Text>{listName.toString()}</Text>
+            </View>
           </View>
           <View style={styles.lineStyle} />
           <View
@@ -182,18 +180,19 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
                 ลบรายการ
               </Text>
             </View>
-
-            <Text
+            <Pressable
               style={{
-                fontSize: 20,
-                color: '#ffffff',
-                textAlign: 'center',
                 padding: 5,
-                backgroundColor: '#E57734',
+                backgroundColor: '#644536',
               }}
               onPress={handleSubmit}>
-              บันทึก
-            </Text>
+              <View>
+                <Text
+                  style={{fontSize: 20, color: '#ffffff', textAlign: 'center'}}>
+                  บันทึก
+                </Text>
+              </View>
+            </Pressable>
           </View>
         </View>
       )}
