@@ -4,34 +4,26 @@ import {
   View,
   TextInput,
   StatusBar,
-  TouchableOpacity,
   Pressable,
 } from 'react-native';
 import React, {useState} from 'react';
-import SQLite from 'react-native-sqlite-storage';
 import {ErrorMessage, Formik} from 'formik';
 import {number, object, string} from 'yup';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-const db = SQLite.openDatabase(
-  {
-    name: 'test2.db',
-    location: 'default',
-  },
-  () => {
-    console.log('Database opened successfully');
-  },
-  error => {
-    console.error('Faild to open database: ', error);
-  },
-);
+
+import {openDatabase} from '../utils/db';
+import {formatDateFromDB} from '../utils/formatDate';
+
+const db = openDatabase();
 
 const MoreInfomation = ({route, navigation}: any, props: any) => {
-  const {id, amount, listName, info, status} = route.params;
+  const {id, amount, listName, info, status, date} = route.params;
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   console.log(route.params);
+
   const initialValues = {
     amount: amount.toString(),
     listName: listName.toString(),
@@ -39,6 +31,7 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
     status: status.toString(),
   };
 
+  console.log(route);
   const handleFormSubmit = (values: any) => {
     db.transaction((tx: any) => {
       tx.executeSql(
@@ -47,7 +40,7 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
           values.amount,
           values.listName,
           values.info,
-          new Date(),
+          selectedDate.toISOString(),
           values.status,
           id,
         ],
@@ -82,14 +75,6 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
     const currentDate = selected || selectedDate;
     setShowDatePicker(false);
     setSelectedDate(currentDate);
-  };
-
-  const formatDate = (date: Date) => {
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear().toString().slice(-2);
-
-    return `${day}/${month}/${year}`;
   };
 
   return (
@@ -157,7 +142,7 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
                 paddingRight: 5,
               }}
               onPress={() => setShowDatePicker(true)}>
-              <Text style={{paddingRight: 5}}>{formatDate(selectedDate)}</Text>
+              <Text style={{paddingRight: 5}}>{formatDateFromDB(date)}</Text>
               <FontAwesome5 name="angle-right" color={'gray'} size={20} />
             </Pressable>
           </View>
@@ -244,6 +229,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     borderColor: 'gray',
+    borderRadius: 8,
+    backgroundColor: '#F9FBE7',
   },
   lineStyle: {
     borderWidth: 0.5,

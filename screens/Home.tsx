@@ -1,39 +1,17 @@
 import React, {useState} from 'react';
 import {View, Text, ScrollView, Pressable, StatusBar} from 'react-native';
-import SQLite from 'react-native-sqlite-storage';
 import CardBalance from '../components/CardBalance';
 import BalanceSplite from '../components/BalanceSplit';
 import Cardlist from '../components/Cardlist';
 import {useFocusEffect} from '@react-navigation/native';
 import {PieChart} from 'react-native-chart-kit';
 
+import {openDatabase, createTable} from '../utils/db';
+
 type Props = {};
 
-const db = SQLite.openDatabase(
-  {
-    name: 'test2.db',
-    location: 'default',
-  },
-  () => {
-    console.log('Database opened successfully');
-    // Create the "expenses" table if it doesn't exist
-    db.transaction((tx: any) => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, amount REAL, listName TEXT, info TEXT, status TEXT, date TEXT)',
-        [],
-        (_: any, result: any) => {
-          console.log('Table created successfully');
-        },
-        (_: any, error: any) => {
-          console.error('Failed to create table: ', error);
-        },
-      );
-    });
-  },
-  (error: any) => {
-    console.error('Failed to open database: ', error);
-  },
-);
+const db = openDatabase();
+createTable(db); // create table in first time
 
 const Home = ({navigation}: any, props: Props) => {
   const PaidPage = () => {
@@ -63,7 +41,7 @@ const Home = ({navigation}: any, props: Props) => {
           (_: any, {rows}: any) => {
             console.log('Data retrieved successfully');
             setList(rows.raw());
-
+            console.log(rows.raw());
             let sumPaid = 0;
             let sumReceived = 0;
 
@@ -223,6 +201,7 @@ const Home = ({navigation}: any, props: Props) => {
                             listName: list.listName,
                             info: list.info,
                             status: list.status,
+                            date: list.date,
                           });
                         }}>
                         <Cardlist value={list} />
@@ -256,7 +235,7 @@ const Home = ({navigation}: any, props: Props) => {
           onPress={PaidPage}
           style={{flex: 0.5, backgroundColor: '#FF6D60', alignItems: 'center'}}>
           <View>
-            <Text style={{fontSize: 20, color: 'white'}}>จ่าย</Text>
+            <Text style={{fontSize: 20, color: 'white'}}>รายจ่าย</Text>
           </View>
         </Pressable>
 
@@ -268,7 +247,7 @@ const Home = ({navigation}: any, props: Props) => {
             alignItems: 'center',
           }}>
           <View>
-            <Text style={{fontSize: 20, color: 'white'}}>รับ</Text>
+            <Text style={{fontSize: 20, color: 'white'}}>รายรับ</Text>
           </View>
         </Pressable>
       </View>

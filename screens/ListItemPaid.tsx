@@ -10,6 +10,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import ItemList from '../components/itemsList';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 type Props = {};
 
 const items = [
@@ -84,7 +85,7 @@ const ListItem: React.FC<Props> = ({navigation}: any) => {
   };
 
   return (
-    <View>
+    <View style={{backgroundColor: '#ffecc9', flex: 1}}>
       <TextInput
         style={styles.input}
         value={inputValue}
@@ -96,12 +97,22 @@ const ListItem: React.FC<Props> = ({navigation}: any) => {
         <View style={{flex: 1}}>
           {storedValue &&
             storedValue.map((item: any, index: number) => (
-              <View key={index} style={{margin: 2}}>
+              <View
+                key={index}
+                style={{
+                  marginHorizontal: 5,
+                  marginVertical: 2,
+                  backgroundColor: '#FFBF9B',
+                  borderColor: '#644536',
+                  borderRadius: 8,
+                  borderWidth: 2,
+                  padding: 5,
+                }}>
                 <Pressable
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    backgroundColor: 'white',
+
                     alignItems: 'center',
                   }}
                   onPress={() => {
@@ -110,11 +121,12 @@ const ListItem: React.FC<Props> = ({navigation}: any) => {
                     });
                   }}>
                   <ItemList value={item} />
-                  <Text
-                    style={styles.deleteButton}
-                    onPress={() => deleteValue(item)}>
-                    Delete
-                  </Text>
+                  <AntDesign
+                    name="closecircle"
+                    color={'red'}
+                    size={20}
+                    onPress={() => deleteValue(item)}
+                  />
                 </Pressable>
               </View>
             ))}
@@ -129,7 +141,7 @@ export default ListItem;
 const styles = StyleSheet.create({
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#644536',
     borderWidth: 1,
     margin: 10,
     paddingHorizontal: 10,

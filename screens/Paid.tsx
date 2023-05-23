@@ -8,33 +8,29 @@ import {
   Pressable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import SQLite from 'react-native-sqlite-storage';
 import {Formik} from 'formik';
 import {number, object, string} from 'yup';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+
+import {openDatabase} from '../utils/db';
+import {formatDate} from '../utils/formatDate';
+
 type Props = {};
 
-const db = SQLite.openDatabase(
-  {
-    name: 'test2.db',
-    location: 'default',
-  },
-  () => {
-    console.log('Database opened successfully');
-  },
-  error => {
-    console.error('Failed to open database: ', error);
-  },
-);
+const db = openDatabase();
 
 const Paid = ({route, navigation}: any, props: Props) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [chooseItem, setChooseItem] = useState('');
   const {value} = route.params || '';
-
+  const initialValues = {
+    amount: '',
+    info: '',
+    status: 'Paid',
+  };
   const itemListPage = () => {
     navigation.navigate('ListitemPaid');
   };
@@ -46,12 +42,6 @@ const Paid = ({route, navigation}: any, props: Props) => {
     }
   }, [value]);
 
-  const initialValues = {
-    amount: '',
-    info: '',
-    status: 'Paid',
-  };
-
   const handleFormSubmit = (values: any) => {
     db.transaction((tx: any) => {
       tx.executeSql(
@@ -60,7 +50,7 @@ const Paid = ({route, navigation}: any, props: Props) => {
           values.amount,
           chooseItem,
           values.info,
-          selectedDate.toISOString().split('T')[0],
+          selectedDate.toISOString(),
           values.status,
         ],
         (_: any, result: any) => {
@@ -71,35 +61,13 @@ const Paid = ({route, navigation}: any, props: Props) => {
         },
       );
     });
-    console.log(selectedDate.toISOString().split('T')[0]);
     navigation.navigate('Home');
   };
-
-  db.transaction((tx: any) => {
-    tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, amount REAL, listName TEXT, info TEXT, date TEXT, status TEXT)',
-      [],
-      (_: any, result: any) => {
-        console.log('Table created successfully');
-      },
-      (error: any) => {
-        console.error('Failed to create table: ', error);
-      },
-    );
-  });
 
   const handleDateChange = (event: any, selected: Date | undefined) => {
     const currentDate = selected || selectedDate;
     setShowDatePicker(false);
     setSelectedDate(currentDate);
-  };
-
-  const formatDate = (date: Date) => {
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear().toString().slice(-2);
-
-    return `${day}/${month}/${year}`;
   };
 
   return (
@@ -229,6 +197,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     borderColor: 'gray',
+    borderRadius: 8,
+    backgroundColor: '#F9FBE7',
   },
   buttonContainer: {
     position: 'absolute',

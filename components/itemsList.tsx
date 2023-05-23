@@ -8,10 +8,11 @@ const itemsList = (props: any) => {
       style={{
         padding: 5,
         margin: 2,
-        backgroundColor: 'white',
         flex: 0.7,
       }}>
-      <Text style={{color: 'black', fontSize: 20}}>{value}</Text>
+      <Text style={{color: 'black', fontSize: 20, paddingLeft: 5}}>
+        {value}
+      </Text>
     </View>
   );
 };

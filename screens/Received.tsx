@@ -4,36 +4,32 @@ import {
   View,
   TextInput,
   StatusBar,
-  TouchableOpacity,
   Pressable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import SQLite from 'react-native-sqlite-storage';
 import {Formik} from 'formik';
 import {number, object, string} from 'yup';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+
+import {openDatabase, createTable} from '../utils/db';
+import {formatDate} from '../utils/formatDate';
+
 type Props = {};
 
-const db = SQLite.openDatabase(
-  {
-    name: 'test2.db',
-    location: 'default',
-  },
-  () => {
-    console.log('Database opened successfully');
-  },
-  error => {
-    console.error('Failed to open database: ', error);
-  },
-);
+const db = openDatabase();
 
 const Received = ({route, navigation}: any, props: Props) => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [chooseItem, setChooseItem] = useState('');
   const {value} = route.params || '';
+  const initialValues = {
+    amount: '',
+    info: '',
+    status: 'Received',
+  };
 
   const itemListPage = () => {
     navigation.navigate('ListItemRecive');
@@ -46,12 +42,6 @@ const Received = ({route, navigation}: any, props: Props) => {
     }
   }, [value]);
 
-  const initialValues = {
-    amount: '',
-    info: '',
-    status: 'Received',
-  };
-
   const handleFormSubmit = (values: any) => {
     db.transaction((tx: any) => {
       tx.executeSql(
@@ -60,7 +50,7 @@ const Received = ({route, navigation}: any, props: Props) => {
           values.amount,
           chooseItem,
           values.info,
-          selectedDate.toISOString().split('T')[0],
+          selectedDate.toISOString(),
           values.status,
         ],
         (_: any, result: any) => {
@@ -74,31 +64,10 @@ const Received = ({route, navigation}: any, props: Props) => {
     navigation.navigate('Home');
   };
 
-  db.transaction((tx: any) => {
-    tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, amount REAL, listName TEXT, info TEXT, date TEXT, status TEXT)',
-      [],
-      (_: any, result: any) => {
-        console.log('Table created successfully');
-      },
-      (error: any) => {
-        console.error('Failed to create table: ', error);
-      },
-    );
-  });
-
   const handleDateChange = (event: any, selected: Date | undefined) => {
     const currentDate = selected || selectedDate;
     setShowDatePicker(false);
     setSelectedDate(currentDate);
-  };
-
-  const formatDate = (date: Date) => {
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear().toString().slice(-2);
-
-    return `${day}/${month}/${year}`;
   };
 
   return (
@@ -111,7 +80,7 @@ const Received = ({route, navigation}: any, props: Props) => {
             backgroundColor: '#ffecc9',
           }}>
           <StatusBar barStyle="light-content" backgroundColor="#92CEA8" />
-          <View style={styles.row}>
+          <View style={styles.inputContainer}>
             <View style={{flexDirection: 'row', paddingLeft: 5}}>
               <FontAwesome5 name="coins" color={'gray'} size={20} />
               <Text style={styles.label}>จำนวนเงิน</Text>
@@ -126,7 +95,7 @@ const Received = ({route, navigation}: any, props: Props) => {
             />
           </View>
           <View style={styles.lineStyle} />
-          <View style={styles.row}>
+          <View style={styles.inputContainer}>
             <View style={{flexDirection: 'row', paddingLeft: 5}}>
               <FontAwesome5
                 name="file-invoice-dollar"
@@ -156,6 +125,7 @@ const Received = ({route, navigation}: any, props: Props) => {
               <AntDesign name="calendar" color={'gray'} size={20} />
               <Text style={styles.label}>วันที่</Text>
             </View>
+
             <Pressable
               style={{
                 alignContent: 'flex-end',
@@ -191,11 +161,11 @@ const Received = ({route, navigation}: any, props: Props) => {
               textAlign="left"
             />
           </View>
-          <Pressable style={styles.buttonContainer} onPress={handleSubmit}>
-            <View>
-              <Text style={styles.button}>บันทึก</Text>
-            </View>
-          </Pressable>
+          <View style={styles.buttonContainer}>
+            <Pressable style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>บันทึก</Text>
+            </Pressable>
+          </View>
         </View>
       )}
     </Formik>
@@ -211,17 +181,13 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 10,
-  },
   label: {
     width: '50%',
     fontSize: 20,
     paddingLeft: 8,
   },
   input: {
+    flex: 1,
     padding: 5,
     fontSize: 20,
   },
@@ -231,6 +197,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     borderColor: 'gray',
+    borderRadius: 8,
+    backgroundColor: '#F9FBE7',
   },
   buttonContainer: {
     position: 'absolute',
@@ -242,12 +210,13 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: '#92CEA8',
   },
-  button: {
+  button: {},
+  buttonText: {
     fontSize: 20,
     color: '#ffffff',
   },
   lineStyle: {
-    borderWidth: 0.2,
+    borderWidth: 0.5,
     borderColor: 'gray',
     margin: 5,
   },
