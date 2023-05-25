@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, ScrollView, Pressable, StatusBar} from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import {PieChart} from 'react-native-chart-kit';
@@ -9,32 +9,12 @@ import BalanceSplite from '../components/BalanceSplit';
 import Cardlist from '../components/Cardlist';
 
 import {openDatabase, createTable} from '../utils/db';
+import {formatMonthYeartoDB, readableDate} from '../utils/formatDate';
 
 type Props = {};
 
 const db = openDatabase();
 createTable(db); // create table in first time
-
-const getCurrentMonthYear = () => {
-  const now = new Date();
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-  const month = monthNames[now.getMonth()];
-  const year = now.getFullYear();
-  return `${month} ${year}`;
-};
 
 const Home = ({navigation}: any, props: Props) => {
   const PaidPage = () => {
@@ -44,7 +24,8 @@ const Home = ({navigation}: any, props: Props) => {
   const ReceivedPage = () => {
     navigation.navigate('Received');
   };
-  const [title, setTitle] = useState('');
+
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [lists, setList] = useState<any[]>([]);
   const [sumPaid, setSumPaid] = useState<number>(0);
   const [sumReceived, setSumReceived] = useState<number>(0);
@@ -52,15 +33,9 @@ const Home = ({navigation}: any, props: Props) => {
   const fetchData = async () => {
     return new Promise<void>((resolve, reject) => {
       db.transaction((tx: any) => {
-        const currentDate = new Date(); // Get the current date
-        const currentMonth = currentDate.getMonth() + 1; // Get the current month (1-indexed)
-        const currentYear = currentDate.getFullYear();
-        const currentMonthFormatted =
-          currentMonth < 10 ? `0${currentMonth}` : `${currentMonth}`;
-
         tx.executeSql(
           `SELECT * FROM expenses WHERE substr(date, 1, 7) = ?`,
-          [`${currentYear}-${currentMonthFormatted}`],
+          [formatMonthYeartoDB(currentDate)],
           (_: any, {rows}: any) => {
             console.log('Data retrieved successfully');
             setList(rows.raw());
@@ -88,12 +63,23 @@ const Home = ({navigation}: any, props: Props) => {
     });
   };
 
+  /*
   useFocusEffect(
     React.useCallback(() => {
       fetchData();
-      setTitle(getCurrentMonthYear());
+      //setTitle(getCurrentMonthYear());
     }, []),
   );
+*/
+  // ...
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, [currentDate]),
+  );
+
+  // ...
 
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
@@ -122,16 +108,37 @@ const Home = ({navigation}: any, props: Props) => {
     const groupedLists: {[key: string]: any[]} = {};
 
     for (const item of list) {
-      const date = new Date(item.date).toDateString();
-
-      if (groupedLists[date]) {
-        groupedLists[date].push(item);
-      } else {
-        groupedLists[date] = [item];
+      const date = new Date(item.date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+      if (!groupedLists[date]) {
+        groupedLists[date] = [];
       }
+      groupedLists[date].push(item);
     }
 
     return groupedLists;
+  };
+
+  const handlerPrivosPage = (date: Date) => {
+    const newDate = new Date(
+      date.getFullYear(),
+      date.getMonth() - 1,
+      date.getDate(),
+    );
+    setCurrentDate(newDate);
+  };
+
+  const handlerNextPage = (date: Date) => {
+    const newDate = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      date.getDate(),
+    );
+    setCurrentDate(newDate);
   };
 
   const groupedLists = groupListsByDate(lists);
@@ -156,9 +163,11 @@ const Home = ({navigation}: any, props: Props) => {
           size={20}
           color={'#E68946'}
           onPress={() => {
-            console.log('1');
+            console.log('previous');
+            handlerPrivosPage(currentDate);
           }}
         />
+
         <Text
           style={{
             color: '#E68946',
@@ -166,19 +175,25 @@ const Home = ({navigation}: any, props: Props) => {
             fontSize: 20,
             paddingHorizontal: 10,
           }}>
-          {title}
+          {readableDate(currentDate)}
         </Text>
-        <AntDesign
-          name="rightcircleo"
-          size={20}
-          color={'#E68946'}
-          onPress={() => {
-            console.log('2');
-          }}
-        />
+        {currentDate.getMonth() == new Date().getMonth() &&
+        currentDate.getFullYear() == new Date().getFullYear() ? (
+          <View></View>
+        ) : (
+          <AntDesign
+            name="rightcircleo"
+            size={20}
+            color={'#E68946'}
+            onPress={() => {
+              console.log('next');
+              handlerNextPage(currentDate);
+            }}
+          />
+        )}
       </View>
       <StatusBar barStyle="light-content" backgroundColor="#644536" />
-      <ScrollView style={{flex: 0.75}}>
+      <View style={{flex: 0.85}}>
         <View
           style={{
             backgroundColor: '#8B4513',
@@ -196,98 +211,105 @@ const Home = ({navigation}: any, props: Props) => {
         </View>
 
         {lists && lists.length > 0 ? (
-          <View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <PieChart
-                data={data}
-                width={300}
-                height={220}
-                chartConfig={chartConfig}
-                accessor="amount"
-                backgroundColor="transparent"
-                paddingLeft="15"
-              />
-            </View>
-            <View
-              style={{
-                backgroundColor: '#ffecc9',
-                borderRadius: 8,
-                padding: 2,
-                shadowColor: '#000',
-                shadowOffset: {width: 0, height: 2},
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 2,
-                margin: 5,
-                borderColor: '#8B4513',
-                borderWidth: 2,
-              }}>
+          <ScrollView style={{flex: 1}}>
+            <View>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <PieChart
+                  data={data}
+                  width={300}
+                  height={220}
+                  chartConfig={chartConfig}
+                  accessor="amount"
+                  backgroundColor="transparent"
+                  paddingLeft="15"
+                />
+              </View>
               <View
                 style={{
+                  backgroundColor: '#ffecc9',
                   borderRadius: 8,
-                  borderBottomRightRadius: 0,
-                  borderBottomLeftRadius: 0,
-                  backgroundColor: '#644536',
+                  padding: 2,
+                  shadowColor: '#000',
+                  shadowOffset: {width: 0, height: 2},
+                  shadowOpacity: 0.1,
+                  shadowRadius: 4,
+                  elevation: 2,
+                  margin: 5,
+                  borderColor: '#8B4513',
+                  borderWidth: 2,
                 }}>
-                <Text
+                <View
                   style={{
-                    //color: '#4D4D4D'
-                    color: '#E68946',
-                    textAlign: 'center',
+                    borderRadius: 8,
+                    borderBottomRightRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    backgroundColor: '#644536',
                   }}>
-                  รายการ
-                </Text>
-              </View>
-              {Object.entries<any[]>(groupedLists)
-                .reverse()
-                .map(([date, dateLists], index: number) => (
-                  <React.Fragment key={`date-${index}`}>
-                    <View
-                      style={{
-                        backgroundColor: '#FFBF9B',
-                      }}>
-                      <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
-                        {date}
-                      </Text>
-                    </View>
-                    {dateLists.reverse().map((list: any, listIndex: number) => (
-                      <Pressable
-                        key={`list-${index}-${listIndex}`}
-                        onPress={() => {
-                          navigation.navigate('MoreInfomation', {
-                            id: list.id,
-                            amount: list.amount,
-                            listName: list.listName,
-                            info: list.info,
-                            status: list.status,
-                            date: list.date,
-                          });
+                  <Text
+                    style={{
+                      //color: '#4D4D4D'
+                      color: '#E68946',
+                      textAlign: 'center',
+                    }}>
+                    รายการ
+                  </Text>
+                </View>
+                {Object.entries<any[]>(groupedLists)
+                  .reverse()
+                  .map(([date, dateLists], index: number) => (
+                    <React.Fragment key={`date-${index}`}>
+                      <View
+                        style={{
+                          backgroundColor: '#FFBF9B',
                         }}>
-                        <Cardlist value={list} />
-                      </Pressable>
-                    ))}
-                  </React.Fragment>
-                ))}
+                        <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
+                          {date}
+                        </Text>
+                      </View>
+                      {dateLists
+                        .reverse()
+                        .map((list: any, listIndex: number) => (
+                          <Pressable
+                            key={`list-${index}-${listIndex}`}
+                            onPress={() => {
+                              navigation.navigate('MoreInfomation', {
+                                id: list.id,
+                                amount: list.amount,
+                                listName: list.listName,
+                                info: list.info,
+                                status: list.status,
+                                date: list.date,
+                              });
+                            }}>
+                            <Cardlist value={list} />
+                          </Pressable>
+                        ))}
+                    </React.Fragment>
+                  ))}
+              </View>
             </View>
-          </View>
+          </ScrollView>
         ) : (
           <View
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
               flex: 1,
-              alignContent: 'center',
+              justifyContent: 'center', // Center vertically
+              alignItems: 'center', // Center horizontally
             }}>
             <Text>ไม่มีรายการในระบบ</Text>
             <Text>สร้างรายรับรายจ่ายของคุณเลย</Text>
           </View>
         )}
-      </ScrollView>
+      </View>
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-evenly',
           flex: 0.05,
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
         }}>
         <Pressable
           onPress={PaidPage}

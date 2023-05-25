@@ -14,3 +14,19 @@ export const formatDateFromDB = (dateString: any) => {
 
   return `${day}/${month}/${year}`;
 };
+
+export const formatMonthYeartoDB = (dateString: any) => {
+  const date = new Date(dateString);
+  const month = date.getMonth() + 1; // Get the current month (1-indexed)
+  const year = date.getFullYear();
+  const monthFormatted = month < 10 ? `0${month}` : `${month}`;
+
+  return `${year}-${monthFormatted}`;
+};
+
+export const readableDate = (dateString: any) => {
+  const now = new Date(dateString);
+  const month = now.toLocaleString('default', {month: 'long'});
+  const year = now.getFullYear();
+  return `${month} ${year}`;
+};

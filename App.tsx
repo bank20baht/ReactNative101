@@ -14,27 +14,6 @@ const Stack = createNativeStackNavigator();
 
 type Props = {};
 
-const getCurrentMonthYear = () => {
-  const now = new Date();
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-  const month = monthNames[now.getMonth()];
-  const year = now.getFullYear();
-  return `${month} ${year}`;
-};
-
 const App = (props: Props) => {
   useEffect(() => {
     SplashScreen.hide();
@@ -44,7 +23,6 @@ const App = (props: Props) => {
 
   useEffect(() => {
     SplashScreen.hide();
-    setTitle(getCurrentMonthYear());
   }, []);
 
   return (
