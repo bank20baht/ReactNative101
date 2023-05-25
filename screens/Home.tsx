@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import {View, Text, ScrollView, Pressable, StatusBar} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
+import {PieChart} from 'react-native-chart-kit';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import CardBalance from '../components/CardBalance';
 import BalanceSplite from '../components/BalanceSplit';
 import Cardlist from '../components/Cardlist';
-import {useFocusEffect} from '@react-navigation/native';
-import {PieChart} from 'react-native-chart-kit';
 
 import {openDatabase, createTable} from '../utils/db';
 
@@ -12,6 +14,27 @@ type Props = {};
 
 const db = openDatabase();
 createTable(db); // create table in first time
+
+const getCurrentMonthYear = () => {
+  const now = new Date();
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  const month = monthNames[now.getMonth()];
+  const year = now.getFullYear();
+  return `${month} ${year}`;
+};
 
 const Home = ({navigation}: any, props: Props) => {
   const PaidPage = () => {
@@ -21,7 +44,7 @@ const Home = ({navigation}: any, props: Props) => {
   const ReceivedPage = () => {
     navigation.navigate('Received');
   };
-
+  const [title, setTitle] = useState('');
   const [lists, setList] = useState<any[]>([]);
   const [sumPaid, setSumPaid] = useState<number>(0);
   const [sumReceived, setSumReceived] = useState<number>(0);
@@ -68,6 +91,7 @@ const Home = ({navigation}: any, props: Props) => {
   useFocusEffect(
     React.useCallback(() => {
       fetchData();
+      setTitle(getCurrentMonthYear());
     }, []),
   );
 
@@ -119,8 +143,42 @@ const Home = ({navigation}: any, props: Props) => {
         //backgroundColor: '#F9FBE7'
         backgroundColor: '#ffecc9',
       }}>
+      <View
+        style={{
+          flex: 0.1,
+          backgroundColor: '#644536',
+          justifyContent: 'center', // Center vertically
+          alignItems: 'center', // Center horizontally
+          flexDirection: 'row',
+        }}>
+        <AntDesign
+          name="leftcircleo"
+          size={20}
+          color={'#E68946'}
+          onPress={() => {
+            console.log('1');
+          }}
+        />
+        <Text
+          style={{
+            color: '#E68946',
+            textAlign: 'center',
+            fontSize: 20,
+            paddingHorizontal: 10,
+          }}>
+          {title}
+        </Text>
+        <AntDesign
+          name="rightcircleo"
+          size={20}
+          color={'#E68946'}
+          onPress={() => {
+            console.log('2');
+          }}
+        />
+      </View>
       <StatusBar barStyle="light-content" backgroundColor="#644536" />
-      <ScrollView style={{flex: 0.95}}>
+      <ScrollView style={{flex: 0.75}}>
         <View
           style={{
             backgroundColor: '#8B4513',
@@ -180,8 +238,9 @@ const Home = ({navigation}: any, props: Props) => {
                   รายการ
                 </Text>
               </View>
-              {Object.entries<any[]>(groupedLists).map(
-                ([date, dateLists], index: number) => (
+              {Object.entries<any[]>(groupedLists)
+                .reverse()
+                .map(([date, dateLists], index: number) => (
                   <React.Fragment key={`date-${index}`}>
                     <View
                       style={{
@@ -208,8 +267,7 @@ const Home = ({navigation}: any, props: Props) => {
                       </Pressable>
                     ))}
                   </React.Fragment>
-                ),
-              )}
+                ))}
             </View>
           </View>
         ) : (

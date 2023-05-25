@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import SplashScreen from 'react-native-splash-screen';
+
 import Home from './screens/Home';
 import Paid from './screens/Paid';
 import Received from './screens/Received';
 import MoreInfomation from './screens/MoreInfomation';
 import ListItemPaid from './screens/ListItemPaid';
 import ListItemRecive from './screens/ListItemRecive';
-
-import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -54,14 +54,7 @@ const App = (props: Props) => {
           name="Home"
           component={Home}
           options={({navigation}) => ({
-            title: title,
-            headerTitleStyle: {
-              color: '#E68946',
-            },
-            headerStyle: {
-              backgroundColor: '#644536',
-            },
-            headerTitleAlign: 'center',
+            headerShown: false,
             headerLeft: () => null, // Remove the back button
           })}
         />
