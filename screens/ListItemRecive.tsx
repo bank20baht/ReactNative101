@@ -57,7 +57,7 @@ const ListItemRecive: React.FC<Props> = ({navigation}: any) => {
   const storeValue = async () => {
     try {
       const newItem = {value: inputValueRecive};
-      const updatedItems = [...itemsRecive, newItem];
+      const updatedItems = [...storedValueRecive, newItem];
       await AsyncStorage.setItem(
         'storedValueRecive',
         JSON.stringify(updatedItems),
@@ -83,51 +83,77 @@ const ListItemRecive: React.FC<Props> = ({navigation}: any) => {
 
   return (
     <View style={{backgroundColor: '#ffecc9', flex: 1}}>
-      <TextInput
-        style={styles.input}
-        value={inputValueRecive}
-        onChangeText={setInputValueRecive}
-        placeholder="Add item"
-        onSubmitEditing={storeValue}
-      />
-      <ScrollView>
-        <View style={{flex: 1}}>
-          {storedValueRecive &&
-            storedValueRecive.map((item: any, index: number) => (
-              <View
-                key={index}
-                style={{
-                  marginHorizontal: 5,
-                  marginVertical: 2,
-                  backgroundColor: '#FFBF9B',
-                  borderColor: '#644536',
-                  borderRadius: 8,
-                  borderWidth: 2,
-                  padding: 5,
-                }}>
-                <Pressable
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                  onPress={() => {
-                    navigation.navigate('Received', {
-                      value: item.value,
-                    });
-                  }}>
-                  <ItemList value={item} />
-                  <AntDesign
-                    name="closecircle"
-                    color={'red'}
-                    size={20}
-                    onPress={() => deleteValue(item)}
-                  />
-                </Pressable>
-              </View>
-            ))}
+      <View
+        style={{
+          flex: 0.1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: 10,
+        }}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <TextInput
+            style={styles.input}
+            value={inputValueRecive}
+            onChangeText={setInputValueRecive}
+            placeholder="Add item"
+            onSubmitEditing={storeValue}
+          />
+          <AntDesign
+            name="plussquare"
+            size={40}
+            color="#644536"
+            style={{flex: 0.1}}
+            onPress={() => {
+              storeValue();
+            }}
+          />
         </View>
-      </ScrollView>
+      </View>
+      <View style={{flex: 0.9}}>
+        <ScrollView>
+          <View style={{flex: 1}}>
+            {storedValueRecive &&
+              storedValueRecive.map((item: any, index: number) => (
+                <View
+                  key={index}
+                  style={{
+                    marginHorizontal: 5,
+                    marginVertical: 2,
+                    backgroundColor: '#FFBF9B',
+                    borderColor: '#644536',
+                    borderRadius: 8,
+                    borderWidth: 2,
+                  }}>
+                  <Pressable
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                    onPress={() => {
+                      navigation.navigate('Paid', {
+                        value: item.value,
+                      });
+                    }}>
+                    <ItemList value={item} />
+                    <AntDesign
+                      name="closecircle"
+                      color={'red'}
+                      size={20}
+                      onPress={() => deleteValue(item)}
+                    />
+                  </Pressable>
+                </View>
+              ))}
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -136,11 +162,11 @@ export default ListItemRecive;
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    margin: 10,
-    paddingHorizontal: 10,
+    borderColor: '#644536',
+    borderWidth: 2,
+    fontSize: 20,
+    flex: 0.9,
+    backgroundColor: '#F9FBE7',
   },
   itemContainer: {
     flexDirection: 'row',
