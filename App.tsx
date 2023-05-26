@@ -9,7 +9,7 @@ import Received from './screens/Received';
 import MoreInfomation from './screens/MoreInfomation';
 import ListItemPaid from './screens/ListItemPaid';
 import ListItemRecive from './screens/ListItemRecive';
-
+import SummaryPage from './screens/SummaryPage';
 const Stack = createNativeStackNavigator();
 
 type Props = {};
@@ -105,6 +105,14 @@ const App = (props: Props) => {
               backgroundColor: '#98D8AA',
             },
           }}
+        />
+        <Stack.Screen
+          name="SummaryPage"
+          component={SummaryPage}
+          options={({navigation}) => ({
+            headerShown: false,
+            headerLeft: () => null, // Remove the back button
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

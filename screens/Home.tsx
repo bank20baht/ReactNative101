@@ -32,6 +32,10 @@ const Home = ({navigation}: any, props: Props) => {
     navigation.navigate('Received');
   };
 
+  const SummaryPage = () => {
+    navigation.navigate('SummaryPage');
+  };
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [lists, setList] = useState<any[]>([]);
   const [sumPaid, setSumPaid] = useState<number>(0);
@@ -153,9 +157,12 @@ const Home = ({navigation}: any, props: Props) => {
         {lists && lists.length > 0 ? (
           <ScrollView style={{flex: 1}}>
             <View>
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <ChartPie sumPaid={sumPaid} sumReceived={sumReceived} />
-              </View>
+              <Pressable onPress={SummaryPage}>
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                  <ChartPie sumPaid={sumPaid} sumReceived={sumReceived} />
+                </View>
+              </Pressable>
+
               <View style={styles.listContainer}>
                 <View style={styles.balanceContainer}>
                   <Text style={styles.balanceText}>รายการ</Text>
