@@ -42,36 +42,52 @@ const Home = ({navigation}: any, props: Props) => {
   const [sumReceived, setSumReceived] = useState<number>(0);
 
   const fetchData = async () => {
-    return new Promise<void>((resolve, reject) => {
-      db.transaction((tx: any) => {
-        tx.executeSql(
-          `SELECT * FROM expenses WHERE substr(date, 1, 7) = ?`,
-          [formatMonthYeartoDB(currentDate)],
-          (_: any, {rows}: any) => {
-            console.log('Data retrieved successfully');
-            setList(rows.raw());
-            //console.log(rows.raw());
-            let sumPaid = 0;
-            let sumReceived = 0;
-
-            for (let i = 0; i < rows.length; i++) {
-              if (rows.item(i).status === 'Paid') {
-                sumPaid += rows.item(i).amount;
-              } else if (rows.item(i).status === 'Received') {
-                sumReceived += rows.item(i).amount;
-              }
-            }
-            setSumPaid(sumPaid);
-            setSumReceived(sumReceived);
-            resolve();
-          },
-          (error: any) => {
-            console.error('Failed to retrieve data: ', error);
-            reject(error);
-          },
-        );
+    try {
+      await new Promise<void>((resolve, reject) => {
+        db.transaction((tx: any) => {
+          tx.executeSql(
+            `SELECT 
+                SUM(CASE WHEN status = 'Paid' AND amount > 0 THEN amount ELSE 0 END) AS sumPaid,
+                SUM(CASE WHEN status = 'Received' AND amount > 0 THEN amount ELSE 0 END) AS sumReceived
+            FROM 
+                expenses
+            WHERE 
+                substr(date, 1, 7) = ?`,
+            [formatMonthYeartoDB(currentDate)],
+            (_: any, {rows}: any) => {
+              const {sumPaid, sumReceived} = rows.item(0);
+              setSumPaid(sumPaid);
+              setSumReceived(sumReceived);
+              resolve();
+            },
+            (error: any) => {
+              console.error('Failed to retrieve sum data: ', error);
+              reject(error);
+            },
+          );
+        });
       });
-    });
+
+      await new Promise<void>((resolve, reject) => {
+        db.transaction((tx: any) => {
+          tx.executeSql(
+            `SELECT * FROM expenses WHERE substr(date, 1, 7) = ?`,
+            [formatMonthYeartoDB(currentDate)],
+            (_: any, {rows}: any) => {
+              console.log('Data retrieved successfully');
+              setList(rows.raw());
+              resolve();
+            },
+            (error: any) => {
+              console.error('Failed to retrieve data: ', error);
+              reject(error);
+            },
+          );
+        });
+      });
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
   };
 
   useFocusEffect(

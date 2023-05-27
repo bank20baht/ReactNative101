@@ -5,31 +5,40 @@ const Cardlist = (props: any) => {
   const {listName, amount, status} = props.value;
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 5,
-        margin: 5,
-      }}>
-      <Text
+    <View>
+      <View
         style={{
-          fontSize: 20,
-          color: status === 'Paid' ? 'red' : 'green',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          padding: 5,
+          margin: 5,
         }}>
-        {listName}
-      </Text>
-      <Text
-        style={{
-          fontSize: 20,
-          color: status === 'Paid' ? 'red' : 'green',
-        }}>
-        {amount} บาท
-      </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            color: status === 'Paid' ? 'red' : 'green',
+          }}>
+          {listName}
+        </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            color: status === 'Paid' ? 'red' : 'green',
+          }}>
+          {amount} บาท
+        </Text>
+      </View>
+      <View style={styles.lineStyle} />
     </View>
   );
 };
 
 export default Cardlist;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  lineStyle: {
+    borderWidth: 0.5,
+    borderColor: '#ffbf9b',
+    marginHorizontal: 5,
+  },
+});

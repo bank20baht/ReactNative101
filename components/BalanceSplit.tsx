@@ -26,8 +26,8 @@ const BalanceSplit = (props: Props) => {
           style={{
             alignItems: 'center',
             flex: 0.5,
-            borderLeftWidth: 1,
-            borderLeftColor: '#644536',
+            //borderLeftWidth: 1,
+            //borderLeftColor: '#644536',
           }}>
           <Text style={{color: 'green'}}>รวมรายรับ</Text>
           <Text style={{color: 'green', fontSize: 20}}>

@@ -4,7 +4,6 @@ import {
   View,
   TextInput,
   StatusBar,
-  TouchableOpacity,
   Pressable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -77,90 +76,108 @@ const Paid = ({route, navigation}: any, props: Props) => {
           style={{
             flex: 1,
             //backgroundColor: '#F9FBE7'
-            backgroundColor: '#ffecc9',
+            backgroundColor: '#ffbf9b',
           }}>
           <StatusBar barStyle="light-content" backgroundColor="#ff6961" />
-          <View style={styles.inputContainer}>
-            <View style={{flexDirection: 'row', paddingLeft: 5}}>
-              <FontAwesome5 name="coins" color={'gray'} size={20} />
-              <Text style={styles.label}>จำนวนเงิน</Text>
-            </View>
-            <TextInput
-              style={styles.input}
-              onChangeText={handleChange('amount')}
-              value={values.amount}
-              textAlign="right"
-              keyboardType="numeric"
-              placeholder="0.00"
-            />
-          </View>
-          <View style={styles.lineStyle} />
-          <View style={styles.inputContainer}>
-            <View style={{flexDirection: 'row', paddingLeft: 5}}>
-              <FontAwesome5
-                name="file-invoice-dollar"
-                color={'gray'}
-                size={20}
-              />
-              <Text style={styles.label}>ชื่อรายการ</Text>
-            </View>
-            <View style={{flexDirection: 'row', paddingRight: 5}}>
-              <View>
-                {chooseItem ? (
-                  <Text onPress={itemListPage} style={{paddingRight: 5}}>
-                    {chooseItem}
-                  </Text>
-                ) : (
-                  <Text onPress={itemListPage} style={{paddingRight: 5}}>
-                    เลือก
-                  </Text>
-                )}
+          <View
+            style={{
+              flex: 0.9,
+              backgroundColor: '#ffecc9',
+              margin: 10,
+              elevation: 5, // Add elevation for the shadow effect
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+            }}>
+            <View style={styles.inputContainer}>
+              <View style={{flexDirection: 'row', paddingLeft: 5}}>
+                <FontAwesome5 name="coins" color={'gray'} size={20} />
+                <Text style={styles.label}>จำนวนเงิน</Text>
               </View>
-              <FontAwesome5 name="angle-right" color={'gray'} size={20} />
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange('amount')}
+                value={values.amount}
+                textAlign="right"
+                keyboardType="numeric"
+                placeholder="0.00"
+              />
             </View>
-          </View>
-          <View style={styles.lineStyle} />
-          <View style={styles.inputContainer}>
-            <View style={{flexDirection: 'row'}}>
-              <AntDesign name="calendar" color={'gray'} size={20} />
-              <Text style={styles.label}>วันที่</Text>
+            <View style={styles.lineStyle} />
+            <View style={styles.inputContainer}>
+              <View style={{flexDirection: 'row', paddingLeft: 5}}>
+                <FontAwesome5
+                  name="file-invoice-dollar"
+                  color={'gray'}
+                  size={20}
+                />
+                <Text style={styles.label}>ชื่อรายการ</Text>
+              </View>
+              <View style={{flexDirection: 'row', paddingRight: 5}}>
+                <View>
+                  {chooseItem ? (
+                    <Text onPress={itemListPage} style={{paddingRight: 5}}>
+                      {chooseItem}
+                    </Text>
+                  ) : (
+                    <Text onPress={itemListPage} style={{paddingRight: 5}}>
+                      เลือก
+                    </Text>
+                  )}
+                </View>
+                <FontAwesome5 name="angle-right" color={'gray'} size={20} />
+              </View>
             </View>
+            <View style={styles.lineStyle} />
+            <View style={styles.inputContainer}>
+              <View style={{flexDirection: 'row'}}>
+                <AntDesign name="calendar" color={'gray'} size={20} />
+                <Text style={styles.label}>วันที่</Text>
+              </View>
 
-            <Pressable
-              style={{
-                alignContent: 'flex-end',
-                flexDirection: 'row',
-                paddingRight: 5,
-              }}
-              onPress={() => setShowDatePicker(true)}>
-              <Text style={{paddingRight: 5}}>{formatDate(selectedDate)}</Text>
-              <FontAwesome5 name="angle-right" color={'gray'} size={20} />
-            </Pressable>
-          </View>
-          {showDatePicker && (
-            <DateTimePicker
-              value={selectedDate}
-              mode="date"
-              display="default"
-              onChange={handleDateChange}
-            />
-          )}
-          <View style={styles.lineStyle} />
-          <View style={{padding: 10}}>
-            <View style={{flexDirection: 'row'}}>
-              <AntDesign name="profile" color={'gray'} size={20} />
-              <Text style={styles.label}>รายละเอียดเพิ่มเติม</Text>
+              <Pressable
+                style={{
+                  alignContent: 'flex-end',
+                  flexDirection: 'row',
+                  paddingRight: 5,
+                }}
+                onPress={() => setShowDatePicker(true)}>
+                <Text style={{paddingRight: 5}}>
+                  {formatDate(selectedDate)}
+                </Text>
+                <FontAwesome5 name="angle-right" color={'gray'} size={20} />
+              </Pressable>
             </View>
+            {showDatePicker && (
+              <DateTimePicker
+                value={selectedDate}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
+            <View style={styles.lineStyle} />
+            <View style={{padding: 10}}>
+              <View style={{flexDirection: 'row'}}>
+                <AntDesign name="profile" color={'gray'} size={20} />
+                <Text style={styles.label}>รายละเอียดเพิ่มเติม</Text>
+              </View>
 
-            <TextInput
-              style={styles.textarea}
-              numberOfLines={4}
-              multiline={true}
-              onChangeText={handleChange('info')}
-              textAlignVertical="top"
-              textAlign="left"
-            />
+              <TextInput
+                style={styles.textarea}
+                numberOfLines={4}
+                multiline={true}
+                onChangeText={handleChange('info')}
+                textAlignVertical="top"
+                textAlign="left"
+              />
+            </View>
           </View>
+
           <View style={styles.buttonContainer}>
             <Pressable style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonText}>บันทึก</Text>
@@ -217,7 +234,7 @@ const styles = StyleSheet.create({
   },
   lineStyle: {
     borderWidth: 0.5,
-    borderColor: 'gray',
+    borderColor: '#ffbf9b',
     margin: 5,
   },
 });

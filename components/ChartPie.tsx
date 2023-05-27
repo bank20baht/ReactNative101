@@ -7,7 +7,7 @@ type Props = {
   sumReceived: number;
 };
 
-const ChartPic = (props: Props) => {
+const ChartPie = (props: Props) => {
   const data = [
     {
       name: 'Paid',
@@ -44,4 +44,4 @@ const ChartPic = (props: Props) => {
   );
 };
 
-export default ChartPic;
+export default ChartPie;

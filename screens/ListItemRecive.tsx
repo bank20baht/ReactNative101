@@ -137,7 +137,7 @@ const ListItemRecive: React.FC<Props> = ({navigation}: any) => {
                       alignItems: 'center',
                     }}
                     onPress={() => {
-                      navigation.navigate('Paid', {
+                      navigation.navigate('Received', {
                         value: item.value,
                       });
                     }}>
