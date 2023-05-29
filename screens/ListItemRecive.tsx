@@ -35,7 +35,7 @@ const itemsRecive = [
 ];
 
 const ListItemRecive: React.FC<Props> = ({navigation}: any) => {
-  const [storedValueRecive, setStoredValueRecive] = useState<any>(null);
+  const [storedValueRecive, setStoredValueRecive] = useState<any>([]);
   const [inputValueRecive, setInputValueRecive] = useState('');
 
   useEffect(() => {
@@ -56,6 +56,7 @@ const ListItemRecive: React.FC<Props> = ({navigation}: any) => {
 
   const storeValue = async () => {
     try {
+      console.log('storedValue 1');
       const newItem = {value: inputValueRecive};
       const updatedItems = [...storedValueRecive, newItem];
       await AsyncStorage.setItem(
