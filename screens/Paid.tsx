@@ -105,6 +105,7 @@ const Paid = ({route, navigation}: any, props: Props) => {
                 textAlign="right"
                 keyboardType="numeric"
                 placeholder="0.00"
+                placeholderTextColor="gray"
               />
             </View>
             <View style={styles.lineStyle} />
@@ -120,11 +121,15 @@ const Paid = ({route, navigation}: any, props: Props) => {
               <View style={{flexDirection: 'row', paddingRight: 5}}>
                 <View>
                   {chooseItem ? (
-                    <Text onPress={itemListPage} style={{paddingRight: 5}}>
+                    <Text
+                      onPress={itemListPage}
+                      style={{paddingRight: 5, color: 'black'}}>
                       {chooseItem}
                     </Text>
                   ) : (
-                    <Text onPress={itemListPage} style={{paddingRight: 5}}>
+                    <Text
+                      onPress={itemListPage}
+                      style={{paddingRight: 5, color: 'black'}}>
                       เลือก
                     </Text>
                   )}
@@ -146,7 +151,7 @@ const Paid = ({route, navigation}: any, props: Props) => {
                   paddingRight: 5,
                 }}
                 onPress={() => setShowDatePicker(true)}>
-                <Text style={{paddingRight: 5}}>
+                <Text style={{paddingRight: 5, color: 'black'}}>
                   {formatDate(selectedDate)}
                 </Text>
                 <FontAwesome5 name="angle-right" color={'gray'} size={20} />
@@ -202,11 +207,13 @@ const styles = StyleSheet.create({
     width: '50%',
     fontSize: 20,
     paddingLeft: 8,
+    color: 'black',
   },
   input: {
     flex: 1,
     padding: 5,
     fontSize: 20,
+    color: 'black',
   },
   textarea: {
     padding: 5,
@@ -216,6 +223,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 8,
     backgroundColor: '#F9FBE7',
+    color: 'black',
   },
   buttonContainer: {
     position: 'absolute',

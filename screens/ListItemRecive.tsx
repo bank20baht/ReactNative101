@@ -103,6 +103,7 @@ const ListItemRecive: React.FC<Props> = ({navigation}: any) => {
             value={inputValueRecive}
             onChangeText={setInputValueRecive}
             placeholder="Add item"
+            placeholderTextColor="gray"
             onSubmitEditing={storeValue}
           />
           <AntDesign
@@ -168,6 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     flex: 0.9,
     backgroundColor: '#F9FBE7',
+    color: 'black',
   },
   itemContainer: {
     flexDirection: 'row',

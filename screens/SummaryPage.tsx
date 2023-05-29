@@ -38,34 +38,6 @@ const SummaryPage = (props: Props) => {
     );
     setCurrentDate(newDate);
   };
-  /*
-  const fetchItemSummary = (db: any, date: Date) => {
-    const startDate = formatMonthYeartoDB(date);
-    const endDate = formatMonthYeartoDB(
-      new Date(date.getFullYear(), date.getMonth() + 1, date.getDate()),
-    );
-
-    db.transaction((tx: any) => {
-      tx.executeSql(
-        `SELECT listName, status, SUM(amount) AS amount FROM expenses WHERE date >= ? AND date < ? GROUP BY listName`,
-        [startDate, endDate],
-        (
-          _: any,
-          {rows}: {rows: {length: number; item: (index: number) => any}},
-        ) => {
-          const data = [];
-          for (let i = 0; i < rows.length; i++) {
-            data.push(rows.item(i));
-          }
-          setItemSummary(data);
-        },
-        (error: any) => {
-          console.error('Failed to fetch item summary: ', error);
-        },
-      );
-    });
-  };
- */
 
   const fetchData = async (db: any, date: Date) => {
     const startDate = formatMonthYeartoDB(date);
@@ -160,6 +132,7 @@ const SummaryPage = (props: Props) => {
             fontSize: 20,
             fontStyle: 'italic',
             fontWeight: 'bold',
+            color: 'black',
           }}>
           สรุปรายรับรายจ่ายประจำเดือน
         </Text>
@@ -200,6 +173,7 @@ const SummaryPage = (props: Props) => {
               fontStyle: 'italic',
               fontWeight: 'bold',
               marginTop: 30,
+              color: 'black',
             }}>
             คงเหลือ {sumReceived - sumPaid} บาท.
           </Text>

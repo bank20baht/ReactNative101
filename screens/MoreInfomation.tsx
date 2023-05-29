@@ -121,7 +121,9 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
               <Text style={styles.label}>ชื่อรายการ</Text>
             </View>
             <View>
-              <Text style={{fontSize: 20}}>{listName.toString()}</Text>
+              <Text style={{fontSize: 20, color: 'black'}}>
+                {listName.toString()}
+              </Text>
             </View>
           </View>
           <View style={styles.lineStyle} />
@@ -142,7 +144,9 @@ const MoreInfomation = ({route, navigation}: any, props: any) => {
                 paddingRight: 5,
               }}
               onPress={() => setShowDatePicker(true)}>
-              <Text style={{paddingRight: 5}}>{formatDateFromDB(date)}</Text>
+              <Text style={{paddingRight: 5, color: 'black'}}>
+                {formatDateFromDB(date)}
+              </Text>
               <FontAwesome5 name="angle-right" color={'gray'} size={20} />
             </Pressable>
           </View>
@@ -217,11 +221,13 @@ const styles = StyleSheet.create({
     width: '50%',
     fontSize: 20,
     paddingLeft: 8,
+    color: 'black',
   },
   input: {
     flex: 1,
     padding: 5,
     fontSize: 20,
+    color: 'black',
   },
   textarea: {
     padding: 5,
@@ -231,6 +237,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 8,
     backgroundColor: '#F9FBE7',
+    color: 'black',
   },
   lineStyle: {
     borderWidth: 0.5,

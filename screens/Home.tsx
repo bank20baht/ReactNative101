@@ -296,6 +296,7 @@ const styles = StyleSheet.create({
   listItemText: {
     fontWeight: 'bold',
     textAlign: 'center',
+    color: 'black',
   },
   noDataContainer: {
     flex: 1,
