@@ -14,33 +14,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 type Props = {};
 
-const items = [
-  {
-    value: 'ข้าว',
-  },
-  {
-    value: 'เดินทาง',
-  },
-  {
-    value: 'น้ำมัน',
-  },
-  {
-    value: 'น้ำ',
-  },
-  {
-    value: 'การเรียน',
-  },
-  {
-    value: 'ขนม',
-  },
-  {
-    value: 'หนังสือ',
-  },
-  {
-    value: 'เครื่องดื่ม',
-  },
-];
-
 const ListItem: React.FC<Props> = ({navigation}: any) => {
   const [storedValue, setStoredValue] = useState<any>([]);
   const [inputValue, setInputValue] = useState('');

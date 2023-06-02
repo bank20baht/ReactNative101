@@ -19,12 +19,6 @@ const App = (props: Props) => {
     SplashScreen.hide();
   }, []);
 
-  const [title, setTitle] = useState('');
-
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
-
   return (
     <NavigationContainer>
       <Stack.Navigator>

@@ -13,27 +13,6 @@ import ItemList from '../components/itemsList';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 type Props = {};
 
-const itemsRecive = [
-  {
-    value: 'พี่ให้',
-  },
-  {
-    value: 'ถูกหวย',
-  },
-  {
-    value: 'ลงทุน',
-  },
-  {
-    value: 'ขายของ',
-  },
-  {
-    value: 'เเม่ให้',
-  },
-  {
-    value: 'พ่อให้',
-  },
-];
-
 const ListItemRecive: React.FC<Props> = ({navigation}: any) => {
   const [storedValueRecive, setStoredValueRecive] = useState<any>([]);
   const [inputValueRecive, setInputValueRecive] = useState('');
